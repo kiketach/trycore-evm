@@ -139,3 +139,10 @@ Aprobado el diseño. Crea la rama feature/verify-remote-versions en ~/.claude/sc
 ~~~~text
 Aprobado el PR #2 con dos correcciones de documentación: (1) sí, cambia "volverá a bloquearse" por "puede volver a bloquearse" en la descripción del PR y en D-05, porque el revisor no es determinista; (2) en la sección Verification del PR todavía aparece setup-uv@v10 como referencia verificada, y contradice el arreglo documentado: cámbialo a @v10.2.0. Con eso haz el merge a develop y sigue con feature/evm-domain. Y sobre la mejora del revisor: aprobada, yo mismo activé la rama en mi terminal.
 ~~~~
+
+## Prompt 13 · 2026-10-07 17:49
+
+~~~~text
+<ide_opened_file>The user opened the file c:\Users\eabri\Documents\Proyectos\Trycore\docs\ai\prompts-log.md in the IDE. This may or may not be related to the current task.</ide_opened_file>
+Aprobado el PR #3 para merge a develop. Antes de mergear, agrega el test de pureza: uno que verifique que importar app.domain.evm no jala fastapi ni sqlalchemy (revisando sys.modules). Es el único criterio que un evaluador podría preguntar y hoy solo se cumple por inspección. Si toma más, déjalo y documenta en el PR por qué queda fuera. Después sigue con feature/projects-crud.
+~~~~
