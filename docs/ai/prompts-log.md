@@ -1,5 +1,7 @@
 # Registro de prompts
 
+> Nota: se omitieron las notificaciones automáticas de la herramienta (avisos de comandos en segundo plano), que no son prompts míos.
+
 Cada prompt enviado a Claude Code en este proyecto, textual y en orden cronológico.
 Lo escribe automáticamente el hook `.claude/hooks/log_prompt.py`; no se edita a mano.
 Es la fuente de la sección «Prompts» de `AI_PROCESS.md`.
@@ -7,7 +9,6 @@ Es la fuente de la sección «Prompts» de `AI_PROCESS.md`.
 ## Prompt 1 · 2026-10-07 11:14
 
 ~~~~text
-<pasted_content id="aefa">
 # Contexto y encargo para Claude Code
 
 Voy a desarrollar la prueba técnica de Trycore para el cargo de Ingeniero de Desarrollo IA. Quiero que actúes como ingeniero de software senior y como par de trabajo: que me enseñes lo que no sé, cuestiones mis decisiones y me expliques el porqué, porque después tengo que explicarlo todo en un video, con mis palabras y sin leer.
@@ -40,13 +41,11 @@ Tests unitarios de toda la lógica EVM, incluidos los casos borde (AC = 0, proye
 5. Propón el plan de ramas feature/* en el orden en que las haríamos.
 
 Después de eso, detente y espera mi aprobación antes de crear el repo o escribir código.
-</pasted_content id="aefa">
 ~~~~
 
 ## Prompt 2 · 2026-10-07 11:57
 
 ~~~~text
-<pasted_content id="aefa">
 Pregunta 1: PV = 0,25 × 20.000 = 5.000; EV = 0,50 × 20.000 = 10.000; CPI = 10.000 / 12.000 ≈ 0,83; SPI = 10.000 / 5.000 = 2,0. La actividad va al doble del ritmo planeado pero con sobrecosto: cada peso gastado rinde 0,83 de valor.
 
 Pregunta 2: si EV = AC, entonces CPI sería siempre 1 y CV siempre 0. Perdería sentido medir costo, porque EVM dejaría de poder detectar si gasto de más o de menos. El EV existe precisamente para comparar el valor del trabajo contra lo que costó lograrlo.
@@ -61,37 +60,11 @@ Decisiones:
 5. Sí al GitHub Actions mínimo (lint + tests en cada PR). Es poco trabajo y hace visible que todo pasa.
 
 Aprobado el plan. Puedes crear el repo y arrancar con feature/backend-setup. Avísame al terminar cada rama para revisarla antes del merge.
-</pasted_content id="aefa">
 ~~~~
 
-## Prompt 3 · 2026-10-07 11:58
+## Prompt 3 · 2026-10-07 12:21
 
 ~~~~text
-<task-notification>
-<task-id>bjmh22icg</task-id>
-<tool-use-id>toolu_01UfCX5EqyaiSyRQwdCHHoDe</tool-use-id>
-<output-file>C:\Users\eabri\AppData\Local\Temp\claude\c--Users-eabri-Documents-Proyectos-Trycore\34425560-1b4f-4fa8-9d91-97d682e2c08b\tasks\bjmh22icg.output</output-file>
-<status>completed</status>
-<summary>Background command "Run local AI review on the initial commit" completed (exit code 0)</summary>
-</task-notification>
-~~~~
-
-## Prompt 4 · 2026-10-07 12:12
-
-~~~~text
-<task-notification>
-<task-id>bp1r58bvw</task-id>
-<tool-use-id>toolu_01K9gCHdnGTFn48H2hGgu8k6</tool-use-id>
-<output-file>C:\Users\eabri\AppData\Local\Temp\claude\c--Users-eabri-Documents-Proyectos-Trycore\34425560-1b4f-4fa8-9d91-97d682e2c08b\tasks\bp1r58bvw.output</output-file>
-<status>completed</status>
-<summary>Background command "Push branch and open PR to develop" completed (exit code 0)</summary>
-</task-notification>
-~~~~
-
-## Prompt 5 · 2026-10-07 12:21
-
-~~~~text
-<pasted_content id="aefa">
 Revisé el PR y no lo apruebo todavía. Cambios antes del merge:
 1. Configura la cobertura: agrega a pyproject.toml la sección [tool.coverage.run] con source=["app"], [tool.coverage.report] con fail_under=80, y --cov=app en los addopts de pytest, para que el build falle si baja del 80%.
 2. En las dependencias dice "httpx2>=2.13.1": ese paquete no existe, TestClient necesita httpx. Corrige y verifica que uv sync funcione desde un clon limpio; revisa también que las versiones de fastapi, pytest y ruff existan.
@@ -100,5 +73,10 @@ Revisé el PR y no lo apruebo todavía. Cambios antes del merge:
 5. Verifica que los links del README a AI_PROCESS.md, DECISIONS.md y docs/ai/prompts-log.md no estén rotos en esta rama.
 
 Cuando estén los cambios vuelvo a revisar y ahí sí te doy el aprobado.
-</pasted_content id="aefa">
+~~~~
+
+## Prompt 4 · 2026-10-07 12:42
+
+~~~~text
+Ajusta el registro de prompts en docs/ai/prompts-log.md: está capturando también los <task-notification> de comandos en segundo plano y los wrappers <pasted_content>, y eso no son prompts míos. Quiero que el log registre únicamente mis mensajes reales, con su texto limpio, en orden cronológico. Limpia los que ya quedaron registrados y deja al inicio del archivo una nota de una línea diciendo que se omitieron las notificaciones automáticas de la herramienta.
 ~~~~
