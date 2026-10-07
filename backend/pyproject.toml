@@ -1,0 +1,55 @@
+[project]
+name = "evm-backend"
+version = "0.1.0"
+description = "REST API for the Earned Value Management dashboard"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "fastapi>=0.142.2",
+    "psycopg[binary]>=3.3.6",
+    "pydantic-settings>=2.15.0",
+    "sqlalchemy>=2",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[dependency-groups]
+dev = [
+    "httpx2>=2.13.1",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.16.10",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E", "W",   # pycodestyle
+    "F",        # pyflakes: unused imports and variables
+    "I",        # import sorting
+    "N",        # naming conventions
+    "B",        # bugbear
+    "UP",       # pyupgrade
+    "SIM",      # simplifications
+    "C4",       # comprehensions
+    "RET",      # return statements
+    "ARG",      # unused arguments
+    "ERA",      # commented-out code
+    "PL",       # pylint, includes PLR2004 magic-value comparisons
+    "PT",       # pytest style
+    "RUF",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Expected values in tests are the point of the test, not magic numbers.
+"tests/**" = ["PLR2004"]
+
+[tool.ruff.lint.flake8-bugbear]
+# FastAPI dependency injection uses calls in argument defaults by design.
+extend-immutable-calls = ["fastapi.Depends", "fastapi.Query", "fastapi.Path"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+markers = ["integration: needs the PostgreSQL test database (docker compose up -d)"]
