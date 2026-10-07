@@ -121,3 +121,15 @@ Aprobadas las dos propuestas. Aplica el diff al hook global, repite la prueba de
 ~~~~text
 Aprobado el PR #1 con dos ajustes mínimos antes del merge: actualiza la descripción del PR para que liste D-01 a D-04 (ya no "se está documentando"), y agrega en DECISIONS.md una glosa de una línea explicando qué es "dsh" en la entrada D-04. Con esos dos cambios haz el merge a develop y arranca feature/ci-pipeline.
 ~~~~
+
+## Prompt 10 · 2026-10-07 17:11
+
+~~~~text
+Adjudicación: el hallazgo queda descartado. Verifiqué independientemente que actions/checkout v7.0.1 existe y es la última release; el revisor razonó con conocimiento de entrenamiento y no con el registro actual, mismo patrón de D-01. Se mantiene actions/checkout@v7 y astral-sh/setup-uv@v10.2.0. Yo mismo hago el push con SKIP_REVIEW=1 git push origin feature/ci-pipeline desde mi terminal, y la ejecución del CI en el PR #2 será la prueba real. Y sí: registra el hallazgo descartado en DECISIONS.md, como segundo caso donde la evidencia verificada le gana a la afirmación de una IA. Además, propongo mejorar el revisor para que antes de afirmar que una versión no existe consulte las etiquetas remotas (gh api o actionlint con verificación remota); propón ese cambio en una rama aparte, no en esta.
+~~~~
+
+## Prompt 11 · 2026-10-07 17:20
+
+~~~~text
+Aprobado el diseño. Crea la rama feature/verify-remote-versions en ~/.claude/scripts e impleméntalo: el motor resuelve las referencias con versión del diff contra sus registros reales (gh api para actions, PyPI para pyproject, npm para package.json) antes de llamar al revisor, le pasa el resultado como evidencia verificada, y la rúbrica nueva solo permite afirmar que una versión no existe cuando la evidencia del registro lo dice. Si el registro no responde, no cuenta como verificado. Incluye los cuatro tests que propones. Y ojo: mientras esa mejora no esté o ci.yml no llegue a main, cada push que toque ci.yml volverá a bloquearse con el mismo hallazgo falso, así que documenta eso en la descripción del PR.
+~~~~
