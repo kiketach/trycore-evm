@@ -1,15 +1,14 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Path, status
+from fastapi import APIRouter, Depends, status
 
 from app.api.errors import NOT_FOUND_RESPONSE
+from app.api.params import ProjectId
 from app.db.session import DbSession
 from app.schemas.project import ProjectResponse, ProjectWrite
 from app.services.project_service import ProjectService
 
 router = APIRouter(prefix="/projects", tags=["projects"])
-
-ProjectId = Annotated[int, Path(description="Project identifier.", gt=0)]
 
 
 def get_project_service(session: DbSession) -> ProjectService:
