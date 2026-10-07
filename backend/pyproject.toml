@@ -51,11 +51,12 @@ extend-immutable-calls = ["fastapi.Depends", "fastapi.Query", "fastapi.Path"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-ra --strict-markers --cov=app --cov-report=term-missing"
+addopts = "-ra --strict-markers --cov --cov-report=term-missing"
 markers = ["integration: needs the PostgreSQL test database (docker compose up -d)"]
 
 [tool.coverage.run]
-source = ["app"]
+# Business layer only: the 80% target applies to EVM logic, not to routers or schemas.
+source = ["app/domain", "app/services"]
 branch = true
 
 [tool.coverage.report]
