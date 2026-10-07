@@ -27,6 +27,23 @@ VALID_ACTIVITY = {
 }
 
 
+# Each invalid value paired with the one field the API must report as rejected.
+INVALID_VALUES = [
+    ({"bac": 0}, "bac"),
+    ({"bac": -100}, "bac"),
+    ({"bac": 10.005}, "bac"),
+    ({"bac": 1_000_000_000_000}, "bac"),
+    ({"planned_percent": -1}, "planned_percent"),
+    ({"planned_percent": 100.01}, "planned_percent"),
+    ({"actual_percent": 101}, "actual_percent"),
+    ({"actual_cost": -0.01}, "actual_cost"),
+    ({"name": "  "}, "name"),
+    ({"bac": "mil"}, "bac"),
+]
+# NUMERIC(14, 2) upper bound: the largest money value the API must still accept.
+MAX_MONEY = 999_999_999_999.99
+
+
 @pytest.fixture
 def project_id(client: TestClient) -> int:
     response = client.post("/projects", json={"name": "Portal de clientes"})
@@ -78,21 +95,18 @@ def test_create_activity_accepts_boundaries_and_cost_overrun(
     assert activity["actual_cost"] == 15000
 
 
-@pytest.mark.parametrize(
-    ("overrides", "field"),
-    [
-        ({"bac": 0}, "bac"),
-        ({"bac": -100}, "bac"),
-        ({"bac": 10.005}, "bac"),
-        ({"bac": 1_000_000_000_000}, "bac"),
-        ({"planned_percent": -1}, "planned_percent"),
-        ({"planned_percent": 100.01}, "planned_percent"),
-        ({"actual_percent": 101}, "actual_percent"),
-        ({"actual_cost": -0.01}, "actual_cost"),
-        ({"name": "  "}, "name"),
-        ({"bac": "mil"}, "bac"),
-    ],
-)
+def test_create_activity_accepts_the_largest_money_value(
+    client: TestClient, project_id: int
+) -> None:
+    activity = create_activity(client, project_id, bac=MAX_MONEY, actual_cost=MAX_MONEY)
+
+    assert activity["bac"] == MAX_MONEY
+    assert activity["actual_cost"] == MAX_MONEY
+    stored = client.get(f"{activities_url(project_id)}/{activity['id']}").json()
+    assert (stored["bac"], stored["actual_cost"]) == (MAX_MONEY, MAX_MONEY)
+
+
+@pytest.mark.parametrize(("overrides", "field"), INVALID_VALUES)
 def test_create_activity_rejects_invalid_values_with_422(
     client: TestClient, project_id: int, overrides: dict, field: str
 ) -> None:
@@ -197,16 +211,18 @@ def test_update_activity_replaces_all_fields(client: TestClient, project_id: int
     assert updated["id"] == created["id"]
 
 
+@pytest.mark.parametrize(("overrides", "field"), INVALID_VALUES)
 def test_update_activity_rejects_invalid_values_with_422(
-    client: TestClient, project_id: int
+    client: TestClient, project_id: int, overrides: dict, field: str
 ) -> None:
     created = create_activity(client, project_id)
 
     response = client.put(
-        f"{activities_url(project_id)}/{created['id']}", json=VALID_ACTIVITY | {"bac": 0}
+        f"{activities_url(project_id)}/{created['id']}", json=VALID_ACTIVITY | overrides
     )
 
     assert response.status_code == 422
+    assert [error["loc"][-1] for error in response.json()["detail"]] == [field]
 
 
 def test_update_missing_activity_returns_404(client: TestClient, project_id: int) -> None:
