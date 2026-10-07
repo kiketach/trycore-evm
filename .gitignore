@@ -28,3 +28,6 @@ Thumbs.db
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Local AI review logs (local_ai_review.py output)
+logs/

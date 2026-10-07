@@ -3,7 +3,42 @@
 Aplicación fullstack para que los líderes de proyecto registren el avance de sus actividades y vean,
 en tiempo real, los indicadores de Valor Ganado (PV, EV, AC, CV, SV, CPI, SPI, EAC, VAC).
 
-> En construcción. Las instrucciones para correr el proyecto en local se agregan con la primera funcionalidad.
+## Requisitos
+- Docker (con Docker Compose)
+- Python 3.12 y [uv](https://docs.astral.sh/uv/)
+
+## Correr en local
+
+### 1. Base de datos
+```bash
+cp .env.example .env        # opcional: solo si quieres cambiar credenciales o puerto
+docker compose up -d --wait
+```
+PostgreSQL queda en `localhost:5433` (el puerto se cambia con `POSTGRES_PORT`).
+
+**Script de inicialización:** al crear el contenedor por primera vez, PostgreSQL ejecuta en orden los scripts de
+[`db/init/`](db/init/): [`01_schema.sql`](db/init/01_schema.sql) crea las tablas en la base `evm` (aplicación) y
+[`02_create_test_database.sql`](db/init/02_create_test_database.sql) crea `evm_test` (pruebas de integración) con el mismo esquema.
+Para reinicializar desde cero: `docker compose down -v && docker compose up -d --wait`.
+
+Sin Docker, sobre un PostgreSQL propio: `psql -d <tu_base> -f db/init/01_schema.sql`.
+
+### 2. Backend
+```bash
+cd backend
+uv sync
+uv run uvicorn app.main:app --reload
+```
+- API: http://localhost:8000
+- Documentación OpenAPI (Swagger UI): http://localhost:8000/api-docs
+
+## Pruebas y linter
+```bash
+cd backend
+uv run pytest            # las pruebas de integración necesitan la BD levantada
+uv run ruff check .
+uv run ruff format --check .
+```
 
 ## Documentos del proceso
 - [`AI_PROCESS.md`](AI_PROCESS.md): cómo usé la IA durante el ejercicio.
