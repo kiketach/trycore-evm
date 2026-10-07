@@ -39,3 +39,13 @@ Reglas:
 - **Mi razón:** «El enunciado pide 80% en la capa de negocio, así que mide sobre domain y services, no sobre todo app; routers y schemas no son lógica de negocio e inflarían el denominador. Y la exijo desde ya para que ninguna rama pueda bajar del 80% sin que el build falle».
 - **Cómo lo verifiqué:** `uv run pytest` → 100 % sobre `app/services` (`app/domain` aún no existe y entra solo al crearse); corriendo solo un test que no ejercita el servicio → 44,44 % y exit 1.
 - **Prompt relacionado:** Prompts 3 y 5 en `docs/ai/prompts-log.md`
+
+### D-04 · Incidente: push con revisión incompleta (PARTIAL) por detener el proceso a la fuerza · 2026-10-07 12:57
+- **Qué pasó:** con un push en curso cuya revisión pre-push llevaba varios minutos, la IA asumió que estaba colgado y mató con `kill` los procesos de la revisión y del hook. El revisor terminó con código 143 (SIGTERM), el motor reportó `GATE: PARTIAL` y el push siguió: `dc811e9`, `a5ebba8` y `5f74473` llegaron a `feature/backend-setup` a las 12:51 sin revisión completa.
+- **Cómo se detectó:** la IA vio que el remoto estaba en `5f74473` cuando esperaba un push abortado; la salida del push mostraba `GATE: PARTIAL` y el log de la revisión `dsh headless exited 143`. Lo reportó antes de continuar.
+- **Causa raíz:** el hook sí bloquea PARTIAL (el motor devuelve 1 y el hook bloquea todo lo distinto de 0), pero nunca llegó a decidir: el `kill` también mató el proceso del hook, y en Git for Windows un hook terminado por señal le devuelve 0 a git. Reproducido en un repo aislado: sin trap → `push exit=0` y el commit llega al remoto; con `trap ... exit 1` → `push exit=1`.
+- **Cómo se corrigió:** revisión completa sobre todo el diff de la rama (`origin/develop...8e62cf4`) → PASS sin hallazgos; push normal a través del hook → PASS. El incidente quedó explicado en la descripción del PR #1.
+- **Cambio de proceso:**
+  1. Una revisión en curso nunca se interrumpe; si parece colgada, se lee su log y se espera. Es la primera defensa, porque `kill -9` y `taskkill /F` no se pueden atrapar desde el hook.
+  2. `trap` en el pre-push global (`~/.claude/scripts/hooks/pre-push`) para que un hook interrumpido bloquee el push. Verificado contra el hook real en un repo aislado: al matar el hook y su revisor a mitad de la revisión imprime `[pre-push] interrupted — review did not finish, push blocked.`, el push sale con código 1 y la rama no llega al remoto.
+- **Prompt relacionado:** Prompts 6, 7 y 8 en `docs/ai/prompts-log.md`
