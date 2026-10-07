@@ -146,3 +146,15 @@ Aprobado el PR #2 con dos correcciones de documentación: (1) sí, cambia "volve
 <ide_opened_file>The user opened the file c:\Users\eabri\Documents\Proyectos\Trycore\docs\ai\prompts-log.md in the IDE. This may or may not be related to the current task.</ide_opened_file>
 Aprobado el PR #3 para merge a develop. Antes de mergear, agrega el test de pureza: uno que verifique que importar app.domain.evm no jala fastapi ni sqlalchemy (revisando sys.modules). Es el único criterio que un evaluador podría preguntar y hoy solo se cumple por inspección. Si toma más, déjalo y documenta en el PR por qué queda fuera. Después sigue con feature/projects-crud.
 ~~~~
+
+## Prompt 14 · 2026-10-07 17:59
+
+~~~~text
+Vi en el log que el hook revisa origin/main...HEAD, o sea el proyecto entero en cada push. Cámbialo para que compare contra origin/develop...HEAD: cada revisión se enfoca solo en el diff de la rama, más rápida y con más profundidad donde importa. Si hay razón para mantener main como base en el release final, déjalo solo para release/*.
+~~~~
+
+## Prompt 15 · 2026-10-07 18:02
+
+~~~~text
+Aprobado el PR #4 con dos tests más antes del merge, porque hoy el PR afirma cosas que la suite no ejercita: (1) un test de integración que cree una actividad, borre su proyecto y verifique que ambas filas desaparecen, para probar la cascada de verdad; (2) un test que haga PUT cambiando un campo y verifique que updated_at avanzó y created_at no cambió (ojo: con la fixture de transacción externa el now() de Postgres no avanza dentro de la misma transacción, así que plantéalo en transacciones separadas). Con esos dos en verde, merge y sigue con feature/activities-crud.
+~~~~
