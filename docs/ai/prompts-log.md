@@ -158,3 +158,9 @@ Vi en el log que el hook revisa origin/main...HEAD, o sea el proyecto entero en 
 ~~~~text
 Aprobado el PR #4 con dos tests más antes del merge, porque hoy el PR afirma cosas que la suite no ejercita: (1) un test de integración que cree una actividad, borre su proyecto y verifique que ambas filas desaparecen, para probar la cascada de verdad; (2) un test que haga PUT cambiando un campo y verifique que updated_at avanzó y created_at no cambió (ojo: con la fixture de transacción externa el now() de Postgres no avanza dentro de la misma transacción, así que plantéalo en transacciones separadas). Con esos dos en verde, merge y sigue con feature/activities-crud.
 ~~~~
+
+## Prompt 16 · 2026-10-07 18:14
+
+~~~~text
+Aprobado el PR #5 con un ajuste pequeño antes del merge: el test de PUT con valores inválidos solo afirma el 422, pero el PR dice que cada caso verifica el campo exacto rechazado; alinéalo con el de POST verificando el loc del error. Agrega también el caso del valor máximo aceptado (999999999999.99) para probar que el límite no rechaza de más. Con eso, merge y dale con feature/evm-endpoint. Vamos bien
+~~~~
