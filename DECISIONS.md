@@ -41,6 +41,7 @@ Reglas:
 - **Prompt relacionado:** Prompts 3 y 5 en `docs/ai/prompts-log.md`
 
 ### D-04 · Incidente: push con revisión incompleta (PARTIAL) por detener el proceso a la fuerza · 2026-10-07 12:57
+- **Glosa:** «dsh» es el revisor de IA de la revisión local: un modelo Gemini que corre dentro de deepseek-harness, con herramientas aisladas para leer el repositorio y el diff.
 - **Qué pasó:** con un push en curso cuya revisión pre-push llevaba varios minutos, la IA asumió que estaba colgado y mató con `kill` los procesos de la revisión y del hook. El revisor terminó con código 143 (SIGTERM), el motor reportó `GATE: PARTIAL` y el push siguió: `dc811e9`, `a5ebba8` y `5f74473` llegaron a `feature/backend-setup` a las 12:51 sin revisión completa.
 - **Cómo se detectó:** la IA vio que el remoto estaba en `5f74473` cuando esperaba un push abortado; la salida del push mostraba `GATE: PARTIAL` y el log de la revisión `dsh headless exited 143`. Lo reportó antes de continuar.
 - **Causa raíz:** el hook sí bloquea PARTIAL (el motor devuelve 1 y el hook bloquea todo lo distinto de 0), pero nunca llegó a decidir: el `kill` también mató el proceso del hook, y en Git for Windows un hook terminado por señal le devuelve 0 a git. Reproducido en un repo aislado: sin trap → `push exit=0` y el commit llega al remoto; con `trap ... exit 1` → `push exit=1`.
