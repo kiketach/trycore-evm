@@ -80,3 +80,23 @@ Cuando estén los cambios vuelvo a revisar y ahí sí te doy el aprobado.
 ~~~~text
 Ajusta el registro de prompts en docs/ai/prompts-log.md: está capturando también los <task-notification> de comandos en segundo plano y los wrappers <pasted_content>, y eso no son prompts míos. Quiero que el log registre únicamente mis mensajes reales, con su texto limpio, en orden cronológico. Limpia los que ya quedaron registrados y deja al inicio del archivo una nota de una línea diciendo que se omitieron las notificaciones automáticas de la herramienta.
 ~~~~
+
+## Prompt 5 · 2026-10-07 12:46
+
+~~~~text
+Buenas preguntas, aquí van mis razones:
+
+Punto 2 (httpx2): acepto tu respuesta. Verifiqué y httpx2 sí existe, es el cliente HTTP de nueva generación de Tom Christie. Regístralo en DECISIONS.md como decisión donde tú tenías razón y yo no: propuse cambiarlo basándome en el nombre inusual, y tu evidencia del paquete y la dependencia de Starlette me corrigió. Aun así, deja como tarea pendiente correr uv sync desde un clon limpio antes de la entrega.
+
+Punto 3 (ruta del esquema): mi razón no es que el enunciado fije la ruta, es de consistencia y legibilidad. El plan de arquitectura que aprobé decía db/init/01_schema.sql montado en docker-entrypoint-initdb.d, y quiero que el script de inicialización de la BD sea evidente para quien evalúa, porque el enunciado sí pide un script de inicialización visible.
+
+Punto 1 (alcance de la cobertura): el enunciado pide 80% en la capa de negocio, así que mide sobre domain y services, no sobre todo app; routers y schemas no son lógica de negocio e inflarían el denominador. Y la exijo desde ya para que ninguna rama pueda bajar del 80% sin que el build falle.
+
+Con eso redacta las entradas de DECISIONS.md y muéstramelas antes de escribirlas.
+~~~~
+
+## Prompt 6 · 2026-10-07 12:51
+
+~~~~text
+Aprobadas las tres entradas tal cual. Escríbelas en DECISIONS.md, haz commit, pasa la revisión y sube el push al PR #1. Cuando el PR esté actualizado me avisas para la revisión final y el aprobado del merge.
+~~~~
