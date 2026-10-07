@@ -50,3 +50,11 @@ Reglas:
   1. Una revisión en curso nunca se interrumpe; si parece colgada, se lee su log y se espera. Es la primera defensa, porque `kill -9` y `taskkill /F` no se pueden atrapar desde el hook.
   2. `trap` en el pre-push global (`~/.claude/scripts/hooks/pre-push`) para que un hook interrumpido bloquee el push. Verificado contra el hook real en un repo aislado: al matar el hook y su revisor a mitad de la revisión imprime `[pre-push] interrupted — review did not finish, push blocked.`, el push sale con código 1 y la rama no llega al remoto.
 - **Prompt relacionado:** Prompts 6, 7 y 8 en `docs/ai/prompts-log.md`
+
+### D-05 · Hallazgo falso del revisor sobre `actions/checkout@v7`: la evidencia le gana a la IA · 2026-10-07 17:11
+- **Qué propuso la IA:** el revisor local (dsh, ver D-04) bloqueó el push de `feature/ci-pipeline` con un warning: «`actions/checkout@v7` no existe o no resuelve», y propuso bajar a `actions/checkout@v4`.
+- **Qué decidí:** descartar el hallazgo. Se mantienen `actions/checkout@v7` y `astral-sh/setup-uv@v10.2.0`; hice el push yo mismo con `SKIP_REVIEW=1` después de adjudicarlo por escrito.
+- **Mi razón:** «Verifiqué independientemente que actions/checkout v7.0.1 existe y es la última release; el revisor razonó con conocimiento de entrenamiento y no con el registro actual, mismo patrón de D-01». Es el segundo caso donde la evidencia verificada le gana a la afirmación de una IA.
+- **Cómo lo verifiqué:** `gh api repos/actions/checkout/git/matching-refs/tags/v7` → `refs/tags/v7`, `v7.0.0`, `v7.0.1`. La ejecución real del CI en el PR #2 (run `37695191075`, commit `782f63a`) terminó en verde: `Run actions/checkout@v7` → success, lint limpio, 3 tests pasan y cobertura de la capa de negocio 100 %.
+- **Qué salió de aquí:** una mejora del revisor en una rama aparte (`feature/verify-remote-versions` en `~/.claude/scripts`): el motor resuelve contra GitHub, PyPI y npm cada versión que agrega el diff y se la pasa al revisor como evidencia verificada; solo puede afirmar que una versión no existe si el registro lo dice. Mientras esa mejora no esté activa o `ci.yml` no llegue a `main`, cada push que toque `ci.yml` vuelve a bloquearse con este mismo hallazgo falso (documentado en el PR #2).
+- **Prompt relacionado:** Prompts 10 y 11 en `docs/ai/prompts-log.md`
