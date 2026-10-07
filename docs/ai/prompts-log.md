@@ -115,3 +115,9 @@ Gracias por reportarlo con esa claridad. Decisiones:
 ~~~~text
 Aprobadas las dos propuestas. Aplica el diff al hook global, repite la prueba de kill en el repo aislado contra el hook real, escribe D-04, haz commit, pasa la revisión y sube el push al PR #1. Cuando quede, me avisas para la revisión final y el aprobado del merge. Y deja explícito en D-04 lo que dijiste al final: kill -9 y taskkill /F no se pueden atrapar, por eso la regla de no interrumpir sigue siendo la primera defensa.
 ~~~~
+
+## Prompt 9 · 2026-10-07 16:53
+
+~~~~text
+Aprobado el PR #1 con dos ajustes mínimos antes del merge: actualiza la descripción del PR para que liste D-01 a D-04 (ya no "se está documentando"), y agrega en DECISIONS.md una glosa de una línea explicando qué es "dsh" en la entrada D-04. Con esos dos cambios haz el merge a develop y arranca feature/ci-pipeline.
+~~~~
