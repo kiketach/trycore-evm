@@ -100,3 +100,18 @@ Con eso redacta las entradas de DECISIONS.md y muéstramelas antes de escribirla
 ~~~~text
 Aprobadas las tres entradas tal cual. Escríbelas en DECISIONS.md, haz commit, pasa la revisión y sube el push al PR #1. Cuando el PR esté actualizado me avisas para la revisión final y el aprobado del merge.
 ~~~~
+
+## Prompt 7 · 2026-10-07 12:57
+
+~~~~text
+Gracias por reportarlo con esa claridad. Decisiones:
+1. Sí, termina la revisión completa del diff sin interrumpirla. Si hay hallazgos, me los traes antes de cualquier push.
+2. Sí, propón el cambio al hook pre-push para que PARTIAL también bloquee, igual que un fallo. Muéstrame el diff del script antes de aplicarlo, porque es mi configuración global.
+3. Registra este incidente como entrada adicional en DECISIONS.md: qué pasó (push con revisión en PARTIAL por detener el proceso a la fuerza), cómo se detectó, cómo se corrigió y qué cambio de proceso sale de aquí. Un fallo de proceso corregido con evidencia vale más que un historial perfecto.
+~~~~
+
+## Prompt 8 · 2026-10-07 16:43
+
+~~~~text
+Aprobadas las dos propuestas. Aplica el diff al hook global, repite la prueba de kill en el repo aislado contra el hook real, escribe D-04, haz commit, pasa la revisión y sube el push al PR #1. Cuando quede, me avisas para la revisión final y el aprobado del merge. Y deja explícito en D-04 lo que dijiste al final: kill -9 y taskkill /F no se pueden atrapar, por eso la regla de no interrumpir sigue siendo la primera defensa.
+~~~~
