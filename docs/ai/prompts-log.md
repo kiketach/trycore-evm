@@ -164,3 +164,9 @@ Aprobado el PR #4 con dos tests más antes del merge, porque hoy el PR afirma co
 ~~~~text
 Aprobado el PR #5 con un ajuste pequeño antes del merge: el test de PUT con valores inválidos solo afirma el 422, pero el PR dice que cada caso verifica el campo exacto rechazado; alinéalo con el de POST verificando el loc del error. Agrega también el caso del valor máximo aceptado (999999999999.99) para probar que el límite no rechaza de más. Con eso, merge y dale con feature/evm-endpoint. Vamos bien
 ~~~~
+
+## Prompt 17 · 2026-10-07 18:42
+
+~~~~text
+Aprueba el PR #6 y mérgealo en develop. Actualiza tu rama con los 91 tests. Ahora abre la rama frontend-setup: inicializa el proyecto frontend, conecta con el backend, y abre PR #7. Pide mi revisión antes de mergear.
+~~~~
