@@ -2,6 +2,8 @@ from datetime import datetime
 
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import text
+from sqlalchemy.orm import Session
 
 pytestmark = pytest.mark.integration
 
@@ -127,6 +129,44 @@ def test_delete_project_returns_204_and_removes_it(client: TestClient) -> None:
     assert response.status_code == 204
     assert response.content == b""
     assert client.get(f"/projects/{created['id']}").status_code == 404
+
+
+def test_delete_project_cascades_to_its_activities(client: TestClient, db_session: Session) -> None:
+    created = create_project(client)
+    activity_id = db_session.execute(
+        text(
+            "INSERT INTO activities "
+            "(project_id, name, bac, planned_percent, actual_percent, actual_cost) "
+            "VALUES (:project_id, 'Diseño', 1000, 50, 40, 300) RETURNING id"
+        ),
+        {"project_id": created["id"]},
+    ).scalar_one()
+    ids = {"project_id": created["id"], "activity_id": activity_id}
+    count_rows = text(
+        "SELECT (SELECT count(*) FROM projects WHERE id = :project_id), "
+        "(SELECT count(*) FROM activities WHERE id = :activity_id)"
+    )
+    assert tuple(db_session.execute(count_rows, ids).one()) == (1, 1)
+
+    response = client.delete(f"/projects/{created['id']}")
+
+    assert response.status_code == 204
+    assert tuple(db_session.execute(count_rows, ids).one()) == (0, 0)
+
+
+def test_update_advances_updated_at_and_keeps_created_at(committing_client: TestClient) -> None:
+    created = create_project(committing_client)
+    try:
+        response = committing_client.put(f"/projects/{created['id']}", json={"name": "Portal v2"})
+
+        assert response.status_code == 200
+        updated = response.json()
+        assert updated["created_at"] == created["created_at"]
+        assert datetime.fromisoformat(updated["updated_at"]) > datetime.fromisoformat(
+            created["updated_at"]
+        )
+    finally:
+        committing_client.delete(f"/projects/{created['id']}")
 
 
 def test_delete_missing_project_returns_404(client: TestClient) -> None:
