@@ -16,11 +16,12 @@ docker compose up -d --wait
 ```
 PostgreSQL queda en `localhost:5433` (el puerto se cambia con `POSTGRES_PORT`).
 
-**Script de inicialización:** al crear el contenedor por primera vez, [`db/init/01-create-databases.sql`](db/init/01-create-databases.sql)
-aplica [`db/schema.sql`](db/schema.sql) a la base `evm` (aplicación) y a `evm_test` (pruebas de integración).
+**Script de inicialización:** al crear el contenedor por primera vez, PostgreSQL ejecuta en orden los scripts de
+[`db/init/`](db/init/): [`01_schema.sql`](db/init/01_schema.sql) crea las tablas en la base `evm` (aplicación) y
+[`02_create_test_database.sql`](db/init/02_create_test_database.sql) crea `evm_test` (pruebas de integración) con el mismo esquema.
 Para reinicializar desde cero: `docker compose down -v && docker compose up -d --wait`.
 
-Sin Docker, sobre un PostgreSQL propio: `psql -d <tu_base> -f db/schema.sql`.
+Sin Docker, sobre un PostgreSQL propio: `psql -d <tu_base> -f db/init/01_schema.sql`.
 
 ### 2. Backend
 ```bash
