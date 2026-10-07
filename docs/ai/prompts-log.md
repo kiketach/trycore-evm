@@ -133,3 +133,9 @@ Adjudicación: el hallazgo queda descartado. Verifiqué independientemente que a
 ~~~~text
 Aprobado el diseño. Crea la rama feature/verify-remote-versions en ~/.claude/scripts e impleméntalo: el motor resuelve las referencias con versión del diff contra sus registros reales (gh api para actions, PyPI para pyproject, npm para package.json) antes de llamar al revisor, le pasa el resultado como evidencia verificada, y la rúbrica nueva solo permite afirmar que una versión no existe cuando la evidencia del registro lo dice. Si el registro no responde, no cuenta como verificado. Incluye los cuatro tests que propones. Y ojo: mientras esa mejora no esté o ci.yml no llegue a main, cada push que toque ci.yml volverá a bloquearse con el mismo hallazgo falso, así que documenta eso en la descripción del PR.
 ~~~~
+
+## Prompt 12 · 2026-10-07 17:34
+
+~~~~text
+Aprobado el PR #2 con dos correcciones de documentación: (1) sí, cambia "volverá a bloquearse" por "puede volver a bloquearse" en la descripción del PR y en D-05, porque el revisor no es determinista; (2) en la sección Verification del PR todavía aparece setup-uv@v10 como referencia verificada, y contradice el arreglo documentado: cámbialo a @v10.2.0. Con eso haz el merge a develop y sigue con feature/evm-domain. Y sobre la mejora del revisor: aprobada, yo mismo activé la rama en mi terminal.
+~~~~
