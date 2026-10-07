@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
-from app.api.routes import health
+from app.api.errors import register_error_handlers
+from app.api.routes import health, projects
 
 API_TITLE = "EVM Dashboard API"
 API_VERSION = "0.1.0"
@@ -18,7 +19,9 @@ def create_app() -> FastAPI:
         docs_url="/api-docs",
         redoc_url=None,
     )
+    register_error_handlers(app)
     app.include_router(health.router)
+    app.include_router(projects.router)
     return app
 
 
