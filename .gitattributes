@@ -1,0 +1,4 @@
+# Normalize line endings: scripts mounted into Linux containers break with CRLF
+* text=auto eol=lf
+*.png binary
+*.ico binary
