@@ -37,7 +37,7 @@ export function EvmChart({ activities }: { activities: ActivityEvm[] }) {
   }
 
   return (
-    <section aria-label="Gráfica PV, EV y AC" className="chart">
+    <section aria-label="Gráfica PV, EV y AC" className="card chart">
       <h2>PV, EV y AC por actividad</h2>
       <p className="muted">
         Si EV queda por debajo de PV, la actividad va atrasada; si AC supera a EV, se está
