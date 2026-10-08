@@ -87,6 +87,40 @@ describe('ActivitiesTable', () => {
     expect(spi.closest('.index-value')).toHaveFocus()
   })
 
+  it('separates what the user types from what the system computes', async () => {
+    backend.addActivity(projectId, LOGIN)
+    render(<ProjectDashboard projectId={projectId} />)
+
+    await findRow('Login')
+    expect(
+      screen.getByRole('columnheader', { name: 'Datos de la actividad' }),
+    ).toHaveAttribute('colspan', '5')
+    expect(
+      screen.getByRole('columnheader', { name: 'Indicadores calculados' }),
+    ).toHaveAttribute('colspan', '8')
+  })
+
+  it('labels every cell so narrow screens can show each activity as a card', async () => {
+    backend.addActivity(projectId, LOGIN)
+    render(<ProjectDashboard projectId={projectId} />)
+
+    const cells = within(await findRow('Login')).getAllByRole('cell')
+    const labels = cells.filter((cell) => !cell.classList.contains('actions')).map((cell) => cell.dataset.label)
+    expect(labels).toEqual([
+      'Nombre', 'BAC', '% planeado', '% real', 'AC',
+      'PV', 'EV', 'CV', 'SV', 'CPI', 'SPI', 'EAC', 'VAC',
+    ])  // prettier-ignore
+  })
+
+  it('marks the main, secondary and destructive actions differently', async () => {
+    backend.addActivity(projectId, LOGIN)
+    render(<ProjectDashboard projectId={projectId} />)
+
+    const row = await findRow('Login')
+    expect(within(row).getByRole('button', { name: 'Guardar' })).toHaveClass('button--primary')
+    expect(within(row).getByRole('button', { name: 'Eliminar' })).toHaveClass('button--danger')
+  })
+
   it('saves an edited row and refreshes the indicators from the backend', async () => {
     const login = backend.addActivity(projectId, LOGIN)
     backend.indicators.set('Login', { cpi: 1.25 })

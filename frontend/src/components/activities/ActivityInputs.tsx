@@ -13,7 +13,7 @@ export function ActivityInputs({ draft, rowLabel, disabled, onChange }: Activity
   return (
     <>
       {ACTIVITY_FIELDS.map((field) => (
-        <td key={field}>
+        <td key={field} className={`input-cell input-cell--${field}`} data-label={FIELD_LABELS[field]}>
           <input
             aria-label={`${FIELD_LABELS[field]} de ${rowLabel}`}
             type={field === 'name' ? 'text' : 'number'}
