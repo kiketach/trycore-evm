@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatNumber, NOT_AVAILABLE_TEXT, unroundedHint } from './format'
+import { formatNumber, formatUnrounded, NOT_AVAILABLE_TEXT, unroundedHint } from './format'
 
 describe('formatNumber', () => {
   it('uses Colombian separators and always two decimals', () => {
@@ -24,5 +24,32 @@ describe('unroundedHint', () => {
 
   it('explains why there is no value', () => {
     expect(unroundedHint(null)).toBe('No disponible: la fórmula dividiría por cero.')
+  })
+})
+
+describe('formatUnrounded', () => {
+  it.each([
+    [0.9999996, '0,9999996'],
+    [1.0000004, '1,0000004'],
+    [0.99999995, '0,99999995'],
+    // Rounds at the first precision that stays above 1; it need not print every digit.
+    [1.00000005, '1,0000001'],
+    [0.9999999999, '0,9999999999'],
+    [1 + Number.EPSILON, '1,0000000000000002'],
+  ])('keeps %f on its side of 1 instead of showing 1,00', (value, expected) => {
+    expect(formatUnrounded(value)).toBe(expected)
+  })
+
+  it('shows exactly 1 as 1,00', () => {
+    expect(formatUnrounded(1)).toBe('1,00')
+  })
+
+  it('never reads as 1 or crosses 1 for any value near 1', () => {
+    for (let exponent = 3; exponent <= 15; exponent++) {
+      for (const value of [1 - 10 ** -exponent, 1 + 10 ** -exponent]) {
+        const shown = Number(formatUnrounded(value).replaceAll('.', '').replace(',', '.'))
+        expect(Math.sign(shown - 1)).toBe(Math.sign(value - 1))
+      }
+    }
   })
 })
