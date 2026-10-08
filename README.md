@@ -65,8 +65,9 @@ npm run dev
 cd backend
 uv run python -m scripts.seed_demo
 ```
-Carga el proyecto **«Portal de clientes (demo)»** usando los mismos servicios y validaciones de la API
-([`backend/scripts/seed_demo.py`](backend/scripts/seed_demo.py)). Si lo vuelves a ejecutar, reemplaza solo ese proyecto.
+Carga el proyecto **«Portal de clientes (demo)»** con las mismas validaciones de la API
+([`backend/scripts/seed_demo.py`](backend/scripts/seed_demo.py)). Si lo vuelves a ejecutar, reemplaza solo ese proyecto,
+en una sola transacción: si algo falla a mitad, el demo anterior queda intacto.
 
 | Actividad | BAC | % plan | % real | AC | PV | EV | CPI | SPI | Lectura |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---|
@@ -117,7 +118,8 @@ Reglas que no son obvias (detalle y razones en [`DECISIONS.md`](DECISIONS.md)):
 | GET | `/projects/{project_id}/evm` | indicadores por actividad y consolidados, con su interpretación |
 
 Cada endpoint documenta en `/api-docs` sus esquemas de request y response y sus códigos de error
-(`404` con `{"detail": "..."}`, `422` de validación, `503` si la base de datos no responde).
+(`404` con `{"detail": "..."}` y `422` de validación). Si la base de datos no responde, `/health` contesta `503`
+con `{"detail": "Database unavailable"}`; los demás endpoints no manejan ese caso y responden `500`.
 
 ## Arquitectura
 
