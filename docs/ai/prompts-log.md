@@ -200,3 +200,9 @@ Hay  2 problemas en el PR #11, corrígelos en la misma rama: (1) el tooltip del 
 ~~~~text
 Aprueba el PR #11 y mérgelo en develop. Después abre feature/demo-data-and-docs como PR #12: datos de demostración para el video (el proyecto de ejemplo completo) y el README final. Pide mi revisión antes de mergear
 ~~~~
+
+## Prompt 23 · 2026-10-08 09:07
+
+~~~~text
+2 correcciones para el PR #12, súbelas en la misma rama: (1) seed_demo.py no es atómico: delete_project, create_project y cada create_activity commitean por separado; si falla una inserción queda el demo viejo borrado y el nuevo incompleto. Envuelve todo el reemplazo en una sola transacción y agrega un test de fallo a mitad. (2) El README dice que la BD caída responde 503 en los endpoints, pero eso solo pasa en /health; en /projects da 500. Ajusta el texto. Además, si es rápido, parametriza el test del seed para fijar los CPI/SPI de cada actividad, no solo el resumen del proyecto. Avísame para nueva revisión
+~~~~
