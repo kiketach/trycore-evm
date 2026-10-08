@@ -278,3 +278,15 @@ listo Mergea el PR #16 a main. Después: etiqueta v1.0.1 en main, y merge de mai
 ~~~~text
 El brief exige los prompts DENTRO de AI_PROCESS.md. Crea hotfix/1.0.2 desde main. En la sección 2 de AI_PROCESS.md, copia los prompts 1-33 de docs/ai/prompts-log.md textualmente y en orden, sin resumir ni parafrasear, y ajusta la intro de la sección para decir que están copiados abajo y que el log continúa en docs/ai/. Bump a 1.0.2 y abre PR a main. Verifica con un diff que los 33 cuerpos sean idénticos al log.
 ~~~~
+
+## Prompt 36 · 2026-10-08 14:15
+
+~~~~text
+Ejecuta el cierre Gitflow del hotfix: merge del PR #18 a main, etiqueta v1.0.2 en main, merge de main de vuelta a develop. Confírmame los hashes
+~~~~
+
+## Prompt 37 · 2026-10-08 14:24
+
+~~~~text
+Sube el log de prompts pendiente con un PR pequeño a develop (sin release). Después levanta el stack local completo - backend, base de datos con el seed del demo y frontend - y déjamelo corriendo con las URLs para grabar el video.
+~~~~
