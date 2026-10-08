@@ -46,6 +46,8 @@ export interface EvmIndicators {
   sv: number
   cpi: number | null
   spi: number | null
+  cpi_exact: number | null
+  spi_exact: number | null
   eac: number | null
   vac: number | null
   cost_status: CostStatus
