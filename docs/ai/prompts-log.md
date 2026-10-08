@@ -176,3 +176,9 @@ Aprueba el PR #6 y mérgealo en develop. Actualiza tu rama con los 91 tests. Aho
 ~~~~text
 Aprueba el PR #7 y mérgelo en develop. Después abre la rama fix/rounding-status-exact desde develop: en el dominio EVM, calcula cost_status y schedule_status sobre los índices exactos sin redondear; el redondeo a 2 decimales solo aplica a lo que se muestra. Actualiza los tests unitarios (casos 0.9996 abajo, 1.0004 arriba y exacto), agrega el caso de límite en integración, y registra la decisión D-06 en DECISIONS.md. Abre PR #8 y pide mi revisión antes de mergear.
 ~~~~
+
+## Prompt 19 · 2026-10-07 21:37
+
+~~~~text
+El número exacto es la verdad del proyecto; el redondeo es solo presentación. Que una etiqueta cambie por 0.0004 de redondeo le miente a quien toma decisiones. Prefiero mostrar 1,00 en rojo y explicarlo, a mostrar 1,00 en verde y que sea falso. Escribe D-06 en DECISIONS.md con esa razón y súbela al PR. Después renombra la rama a bugfix/rounding-status-exact siguiendo Gitflow, y cuando esté todo, mérgelo en develop. Avísame el SHA del merge y abre feature/activities-table como PR #9. Pide mi revisión antes de mergear
+~~~~
