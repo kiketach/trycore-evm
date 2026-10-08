@@ -57,7 +57,11 @@ describe('ProjectSummary', () => {
     const cpi = indexTile('CPI del proyecto')
     const value = within(cpi).getByText('1,00').closest('.index-value')
     expect(value).toHaveClass('index-value--bad')
-    expect(value).toHaveAttribute('title', 'Sobre presupuesto. Valor sin redondear: 0,9996')
+    expect(
+      within(cpi).getByText('Sobre presupuesto. Valor sin redondear: 0,9996', {
+        selector: '.visually-hidden',
+      }),
+    ).toBeInTheDocument()
     expect(within(cpi).getByText('Sobre presupuesto')).toBeInTheDocument()
   })
 

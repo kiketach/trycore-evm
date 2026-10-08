@@ -46,16 +46,45 @@ describe('ActivitiesTable', () => {
 
   it('shows N/D with an explanation for indicators that could not be computed', async () => {
     backend.addActivity(projectId, { ...LOGIN, actual_cost: 0 })
-    backend.indicators.set('Login', { cpi: null, eac: null, vac: null, spi: 0.8 })
+    backend.indicators.set('Login', {
+      cpi: null, cpi_exact: null, eac: null, vac: null,
+      spi: 0.8, spi_exact: 0.8, schedule_status: 'BEHIND',
+    })  // prettier-ignore
 
     render(<ProjectDashboard projectId={projectId} />)
 
-    const notAvailable = within(await findRow('Login')).getAllByText('N/D')
-    expect(notAvailable).toHaveLength(3)
-    expect(notAvailable[0].closest('[title]')).toHaveAttribute(
-      'title',
-      'No disponible: la fórmula dividiría por cero.',
-    )
+    const row = await findRow('Login')
+    expect(within(row).getAllByText('N/D')).toHaveLength(3)
+    const hint = 'No disponible: la fórmula dividiría por cero.'
+    expect(within(row).getByText(hint, { selector: '.visually-hidden' })).toBeInTheDocument()
+    expect(within(row).getAllByTitle(hint)).toHaveLength(2)
+  })
+
+  it('announces the CPI and SPI status of each row and reaches it by keyboard', async () => {
+    backend.addActivity(projectId, LOGIN)
+    backend.indicators.set('Login', {
+      cpi: 1.25, cpi_exact: 1.25, cost_status: 'UNDER_BUDGET',
+      spi: 0.8, spi_exact: 0.8, schedule_status: 'BEHIND',
+    })  // prettier-ignore
+    const user = userEvent.setup()
+    render(<ProjectDashboard projectId={projectId} />)
+
+    const row = await findRow('Login')
+    const cpi = within(row).getByText('Bajo presupuesto. Valor sin redondear: 1,25', {
+      selector: '.visually-hidden',
+    })
+    const spi = within(row).getByText('Atrasado. Valor sin redondear: 0,80', {
+      selector: '.visually-hidden',
+    })
+
+    const cpiValue = cpi.closest('.index-value')
+    expect(cpiValue).toHaveAttribute('tabindex', '0')
+    for (let step = 0; step < 50 && document.activeElement !== cpiValue; step++) {
+      await user.tab()
+    }
+    expect(cpiValue).toHaveFocus()
+    await user.tab()
+    expect(spi.closest('.index-value')).toHaveFocus()
   })
 
   it('saves an edited row and refreshes the indicators from the backend', async () => {

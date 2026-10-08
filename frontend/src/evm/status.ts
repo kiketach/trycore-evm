@@ -1,4 +1,5 @@
 import type { CostStatus, ScheduleStatus } from '../api/types'
+import { NOT_AVAILABLE_HINT, unroundedHint } from '../format'
 
 // Two colours plus grey, no invented thresholds: the backend already decided the status
 // from the exact index (D-06); this only says how to show it.
@@ -32,4 +33,9 @@ export function projectVerdict(cost: CostStatus, schedule: ScheduleStatus): stri
   const costText = COST_STATUS[cost].label.toLowerCase()
   const scheduleText = SCHEDULE_STATUS[schedule].label.toLowerCase()
   return `Costo: ${costText}. Cronograma: ${scheduleText}.`
+}
+
+// What a CPI or SPI value means, for its tooltip and for screen readers.
+export function indexExplanation(unrounded: number | null, status: StatusDisplay): string {
+  return unrounded === null ? NOT_AVAILABLE_HINT : `${status.label}. ${unroundedHint(unrounded)}`
 }
