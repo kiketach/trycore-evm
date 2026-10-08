@@ -19,6 +19,14 @@ export class ApiError extends Error {
   }
 }
 
+export function jsonBody(method: 'POST' | 'PUT', data: unknown): RequestInit {
+  return { method, body: JSON.stringify(data) }
+}
+
+export function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error)
+}
+
 export async function apiRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
   const headers = new Headers(init.headers)
   if (init.body !== undefined) {
