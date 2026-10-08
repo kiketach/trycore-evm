@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { errorMessage } from '../api/client'
 import { getHealth } from '../api/health'
 
 type Connection =
@@ -16,8 +17,7 @@ export function BackendStatus() {
         if (active) setConnection({ state: 'connected' })
       })
       .catch((error: unknown) => {
-        const reason = error instanceof Error ? error.message : String(error)
-        if (active) setConnection({ state: 'failed', reason })
+        if (active) setConnection({ state: 'failed', reason: errorMessage(error) })
       })
     return () => {
       active = false
