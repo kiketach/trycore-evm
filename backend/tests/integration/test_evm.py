@@ -7,8 +7,8 @@ Project with three activities:
 
 Sums: BAC 31,000; PV 10,500; EV 14,300; AC 15,200
 CV = -900; SV = 3,800
-CPI = 14,300 / 15,200 = 0.9408 -> 0.94 (over budget)
-SPI = 14,300 / 10,500 = 1.3619 -> 1.36 (ahead)
+CPI = 14,300 / 15,200 = 0.940789... -> 0.94 (over budget)
+SPI = 14,300 / 10,500 = 1.361904... -> 1.36 (ahead)
 EAC = 31,000 x 15,200 / 14,300 = 32,951.05; VAC = -1,951.05
 """
 
@@ -18,7 +18,7 @@ from fastapi.testclient import TestClient
 pytestmark = pytest.mark.integration
 
 INDICATOR_FIELDS = {
-    "bac", "pv", "ev", "ac", "cv", "sv", "cpi", "spi", "eac", "vac",
+    "bac", "pv", "ev", "ac", "cv", "sv", "cpi", "spi", "cpi_exact", "spi_exact", "eac", "vac",
     "cost_status", "schedule_status",
 }  # fmt: skip
 PROJECT_EVM_FIELDS = {"project_id", "project_name", "cutoff_date", "summary", "activities"}
@@ -73,6 +73,8 @@ def test_project_summary_comes_from_summed_activity_values(client: TestClient) -
         "sv": 3800,
         "cpi": 0.94,
         "spi": 1.36,
+        "cpi_exact": pytest.approx(14300 / 15200),
+        "spi_exact": pytest.approx(14300 / 10500),
         "eac": 32951.05,
         "vac": -1951.05,
         "cost_status": "OVER_BUDGET",
@@ -91,10 +93,11 @@ def test_each_activity_has_its_own_indicators_in_creation_order(client: TestClie
     assert login == {
         "name": "Login",
         "bac": 10000, "pv": 5000, "ev": 4000, "ac": 3200, "cv": 800, "sv": -1000,
-        "cpi": 1.25, "spi": 0.8, "eac": 8000, "vac": 2000,
+        "cpi": 1.25, "spi": 0.8, "cpi_exact": 1.25, "spi_exact": 0.8, "eac": 8000, "vac": 2000,
         "cost_status": "UNDER_BUDGET", "schedule_status": "BEHIND",
     }  # fmt: skip
     assert (by_name["Reportes"]["cpi"], by_name["Reportes"]["spi"]) == (0.83, 2.0)
+    assert by_name["Reportes"]["cpi_exact"] == pytest.approx(10000 / 12000)
     assert (by_name["Reportes"]["eac"], by_name["Reportes"]["vac"]) == (24000, -4000)
     assert by_name["Reportes"]["cost_status"] == "OVER_BUDGET"
     assert by_name["Reportes"]["schedule_status"] == "AHEAD"
@@ -106,6 +109,7 @@ def test_activity_without_cost_returns_null_indices_not_zero(client: TestClient)
 
     assert migration["cv"] == 300
     assert migration["cpi"] is None
+    assert migration["cpi_exact"] is None
     assert migration["eac"] is None
     assert migration["vac"] is None
     assert migration["spi"] == 0.6
@@ -119,7 +123,7 @@ def test_project_without_activities_returns_zeros_and_nulls(client: TestClient) 
     assert evm["activities"] == []
     assert evm["summary"] == {
         "bac": 0, "pv": 0, "ev": 0, "ac": 0, "cv": 0, "sv": 0,
-        "cpi": None, "spi": None, "eac": None, "vac": None,
+        "cpi": None, "spi": None, "cpi_exact": None, "spi_exact": None, "eac": None, "vac": None,
         "cost_status": "NOT_AVAILABLE", "schedule_status": "NOT_AVAILABLE",
     }  # fmt: skip
 
@@ -161,6 +165,7 @@ def test_status_reads_the_exact_index_while_the_value_is_shown_rounded(
 
     for indicators in (evm["summary"], evm["activities"][0]):
         assert (indicators["cpi"], indicators["spi"]) == (1.0, 1.0)
+        assert indicators["cpi_exact"] != 1.0
         assert indicators["cost_status"] == cost_status
         assert indicators["schedule_status"] == schedule_status
 
