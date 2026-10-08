@@ -12,7 +12,7 @@ interface RecordedRequest {
 
 const NOT_COMPUTED: EvmIndicators = {
   bac: 0, pv: 0, ev: 0, ac: 0, cv: 0, sv: 0,
-  cpi: null, spi: null, eac: null, vac: null,
+  cpi: null, spi: null, cpi_exact: null, spi_exact: null, eac: null, vac: null,
   cost_status: 'NOT_AVAILABLE', schedule_status: 'NOT_AVAILABLE',
 }  // prettier-ignore
 
