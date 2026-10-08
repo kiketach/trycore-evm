@@ -194,3 +194,15 @@ Aprueba el PR #10 y mérgelo en develop. Después abre feature/evm-dashboard com
 ~~~~text
 Hay  2 problemas en el PR #11, corrígelos en la misma rama: (1) el tooltip del valor exacto lo redondea a 6 decimales en format.ts, así un cpi_exact de 0,9999996 se muestra como 1,00 y el tooltip deja de explicar el estado; muestra el valor tal como llega del backend o usa precisión adaptativa que nunca colapse un valor distinto de 1 en 1,00, y agrega tests de esos casos límite. (2) En la tabla, la celda CPI/SPI (IndexValue/IndicatorCells) solo tiene ícono aria-hidden y número: el estado no es accesible por teclado ni por lector de pantalla. Agrega el texto de estado accesible en la celda y un test. Sube los cambios al PR #11 y avísame para nueva revisión.
 ~~~~
+
+## Prompt 22 · 2026-10-08 08:33
+
+~~~~text
+Aprueba el PR #11 y mérgelo en develop. Después abre feature/demo-data-and-docs como PR #12: datos de demostración para el video (el proyecto de ejemplo completo) y el README final. Pide mi revisión antes de mergear
+~~~~
+
+## Prompt 23 · 2026-10-08 09:07
+
+~~~~text
+2 correcciones para el PR #12, súbelas en la misma rama: (1) seed_demo.py no es atómico: delete_project, create_project y cada create_activity commitean por separado; si falla una inserción queda el demo viejo borrado y el nuevo incompleto. Envuelve todo el reemplazo en una sola transacción y agrega un test de fallo a mitad. (2) El README dice que la BD caída responde 503 en los endpoints, pero eso solo pasa en /health; en /projects da 500. Ajusta el texto. Además, si es rápido, parametriza el test del seed para fijar los CPI/SPI de cada actividad, no solo el resumen del proyecto. Avísame para nueva revisión
+~~~~
