@@ -212,3 +212,21 @@ Aprueba el PR #11 y mérgelo en develop. Después abre feature/demo-data-and-doc
 ~~~~text
 Aprueba el PR #12 y mérgelo en develop. Ahora la compuerta 3: repite la instalación desde un clon limpio (uv sync --locked, seed, pytest, npm ci, tests, build), y si todo pasa abre release/1.0.0 hacia main. Avísame con el resultado antes de mergear a main.
 ~~~~
+
+## Prompt 25 · 2026-10-08 09:50
+
+~~~~text
+ok espero
+~~~~
+
+## Prompt 26 · 2026-10-08 10:03
+
+~~~~text
+Revisa el log más reciente en logs/, la revisión del hook sigue avanzando (líneas nuevas, marcas de tiempo recientes) o está congelada?
+~~~~
+
+## Prompt 27 · 2026-10-08 10:27
+
+~~~~text
+Aprueba el PR #13. Sigue Gitflow: merge a main, etiqueta v1.0.0 en main, y merge de main de vuelta a develop. Después abre feature/ui-polish como PR #14: mejora los estilos de botones y tarjetas y haz la tabla de actividades responsive sin scroll lateral. Mantén la estructura actual, sin sidebar. Pide mi revisión antes de mergear. La idea es hacer la interfaz mas intuitiva y facil de leer a primera vista
+~~~~

@@ -26,6 +26,14 @@ export const SCHEDULE_STATUS: Record<ScheduleStatus, StatusDisplay> = {
   NOT_AVAILABLE: { label: 'No disponible', tone: 'neutral' },
 }
 
+// The banner takes the worst of the two readings: any "bad" status makes it a warning.
+export function verdictTone(cost: CostStatus, schedule: ScheduleStatus): Tone {
+  const tones = [COST_STATUS[cost].tone, SCHEDULE_STATUS[schedule].tone]
+  if (tones.includes('bad')) return 'bad'
+  if (tones.includes('good')) return 'good'
+  return 'neutral'
+}
+
 export function projectVerdict(cost: CostStatus, schedule: ScheduleStatus): string {
   if (cost === 'NOT_AVAILABLE' && schedule === 'NOT_AVAILABLE') {
     return 'Aún no hay datos suficientes para evaluar el proyecto.'

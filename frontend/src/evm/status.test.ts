@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { COST_STATUS, projectVerdict, SCHEDULE_STATUS } from './status'
+import { COST_STATUS, projectVerdict, SCHEDULE_STATUS, verdictTone } from './status'
 
 describe('status display', () => {
   it('uses green only for at-or-better-than-plan and red only for worse', () => {
@@ -23,5 +23,21 @@ describe('status display', () => {
     expect(projectVerdict('NOT_AVAILABLE', 'NOT_AVAILABLE')).toBe(
       'Aún no hay datos suficientes para evaluar el proyecto.',
     )
+  })
+})
+
+describe('verdictTone', () => {
+  it('warns as soon as cost or schedule is worse than planned', () => {
+    expect(verdictTone('OVER_BUDGET', 'AHEAD')).toBe('bad')
+    expect(verdictTone('UNDER_BUDGET', 'BEHIND')).toBe('bad')
+  })
+
+  it('is good only when nothing is worse than planned', () => {
+    expect(verdictTone('ON_BUDGET', 'AHEAD')).toBe('good')
+    expect(verdictTone('UNDER_BUDGET', 'NOT_AVAILABLE')).toBe('good')
+  })
+
+  it('is neutral when nothing can be evaluated', () => {
+    expect(verdictTone('NOT_AVAILABLE', 'NOT_AVAILABLE')).toBe('neutral')
   })
 })

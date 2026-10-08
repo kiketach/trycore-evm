@@ -1,5 +1,11 @@
 import type { EvmIndicators } from '../../api/types'
-import { COST_STATUS, projectVerdict, SCHEDULE_STATUS } from '../../evm/status'
+import {
+  COST_STATUS,
+  projectVerdict,
+  SCHEDULE_STATUS,
+  TONE_ICON,
+  verdictTone,
+} from '../../evm/status'
 import { formatNumber } from '../../format'
 import { IndexValue } from './IndexValue'
 import { StatusBadge } from './StatusBadge'
@@ -20,13 +26,19 @@ const MONEY_TILES: readonly { key: MoneyKey; label: string; formula: string }[] 
 export function ProjectSummary({ summary }: { summary: EvmIndicators }) {
   const cost = COST_STATUS[summary.cost_status]
   const schedule = SCHEDULE_STATUS[summary.schedule_status]
+  const verdict = verdictTone(summary.cost_status, summary.schedule_status)
 
   return (
     <section aria-label="Indicadores del proyecto" className="summary">
       <h2>Indicadores del proyecto</h2>
-      <p className="verdict">{projectVerdict(summary.cost_status, summary.schedule_status)}</p>
+      <p className={`verdict verdict--${verdict}`}>
+        <span aria-hidden="true" className="status-icon">
+          {TONE_ICON[verdict]}
+        </span>
+        {projectVerdict(summary.cost_status, summary.schedule_status)}
+      </p>
       <div className="index-tiles">
-        <article className="tile tile--index" aria-label="CPI del proyecto">
+        <article className={`tile tile--index tile--${cost.tone}`} aria-label="CPI del proyecto">
           <h3>Desempeño de costo (CPI)</h3>
           <p className="tile-value">
             <IndexValue rounded={summary.cpi} unrounded={summary.cpi_exact} status={cost} />
@@ -34,7 +46,7 @@ export function ProjectSummary({ summary }: { summary: EvmIndicators }) {
           <StatusBadge status={cost} />
           <p className="muted">EV / AC. Mayor que 1: cada peso gastado rinde más de lo planeado.</p>
         </article>
-        <article className="tile tile--index" aria-label="SPI del proyecto">
+        <article className={`tile tile--index tile--${schedule.tone}`} aria-label="SPI del proyecto">
           <h3>Desempeño de cronograma (SPI)</h3>
           <p className="tile-value">
             <IndexValue rounded={summary.spi} unrounded={summary.spi_exact} status={schedule} />

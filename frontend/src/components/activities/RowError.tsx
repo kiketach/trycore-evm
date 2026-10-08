@@ -5,7 +5,7 @@ export function RowError({ message }: { message: string | null }) {
     return null
   }
   return (
-    <tr>
+    <tr className="row-message">
       <td colSpan={TOTAL_COLUMNS} className="row-error" role="alert">
         {message}
       </td>
