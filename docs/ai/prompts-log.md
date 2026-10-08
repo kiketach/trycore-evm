@@ -206,3 +206,9 @@ Aprueba el PR #11 y mérgelo en develop. Después abre feature/demo-data-and-doc
 ~~~~text
 2 correcciones para el PR #12, súbelas en la misma rama: (1) seed_demo.py no es atómico: delete_project, create_project y cada create_activity commitean por separado; si falla una inserción queda el demo viejo borrado y el nuevo incompleto. Envuelve todo el reemplazo en una sola transacción y agrega un test de fallo a mitad. (2) El README dice que la BD caída responde 503 en los endpoints, pero eso solo pasa en /health; en /projects da 500. Ajusta el texto. Además, si es rápido, parametriza el test del seed para fijar los CPI/SPI de cada actividad, no solo el resumen del proyecto. Avísame para nueva revisión
 ~~~~
+
+## Prompt 24 · 2026-10-08 09:34
+
+~~~~text
+Aprueba el PR #12 y mérgelo en develop. Ahora la compuerta 3: repite la instalación desde un clon limpio (uv sync --locked, seed, pytest, npm ci, tests, build), y si todo pasa abre release/1.0.0 hacia main. Avísame con el resultado antes de mergear a main.
+~~~~
