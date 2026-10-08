@@ -20,7 +20,7 @@ Los prompts textuales están en [`docs/ai/prompts-log.md`](docs/ai/prompts-log.m
 
 El proceso fue iterativo. Revisaba cada PR en GitHub, identificaba qué faltaba o qué no entendía y formulaba el siguiente pedido a partir de eso. Los prompts pasaron de aprender EVM y definir el plan a pedir cambios concretos, pruebas de casos borde y correcciones visuales.
 
-Gestioné 15 PRs: 14 se integraron y el #8 se cerró y reemplazó por el #9 al cambiar el nombre de la rama. Trabajé con Gitflow, usando ramas `feature/*`, `bugfix/*` y `release/*`, y con mensajes de commit descriptivos en imperativo. No mergeé un PR sin revisión; cuando aparecían hallazgos, pedía correcciones y esperaba el CI en verde antes de integrarlo.
+Gestioné 17 PRs: 16 se integraron y el #8 se cerró y reemplazó por el #9 al cambiar el nombre de la rama. Trabajé con Gitflow, usando ramas `feature/*`, `bugfix/*` y `release/*`, y con mensajes de commit descriptivos en imperativo. No mergeé un PR sin revisión; cuando aparecían hallazgos, pedía correcciones y esperaba el CI en verde antes de integrarlo.
 
 **Fuentes:** registro de prompts e historial de PRs.
 
