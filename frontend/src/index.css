@@ -35,3 +35,71 @@ body {
 .status--error {
   color: var(--color-error);
 }
+
+.muted {
+  color: var(--color-muted);
+}
+
+.project-panel,
+.project-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-block: 1rem;
+}
+
+.project-form label,
+.project-panel label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0.375rem 0.5rem;
+  text-align: left;
+}
+
+th[title] {
+  cursor: help;
+}
+
+td.number {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+td input {
+  width: 7rem;
+}
+
+td:first-child input {
+  width: 12rem;
+}
+
+.new-row {
+  background: #f3f4f6;
+}
+
+.row-error {
+  color: var(--color-error);
+}
