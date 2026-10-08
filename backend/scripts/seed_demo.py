@@ -2,7 +2,9 @@
 
 Run from backend/:  uv run python -m scripts.seed_demo
 
-It goes through the same services as the API, so the data passes the same validation.
+The data is built with the API's request schemas, so it passes the same validation, and is
+written through the repositories. The whole replacement is one transaction: if any insert
+fails, nothing is committed and the previous demo project stays as it was.
 Re-running it replaces only the project named DEMO_PROJECT_NAME; nothing else is touched.
 
 Expected project indicators (computed by hand, see README):
@@ -17,11 +19,12 @@ from decimal import Decimal
 from sqlalchemy.orm import Session
 
 from app.db.session import get_session_factory
+from app.models.activity import Activity
 from app.models.project import Project
+from app.repositories.activity_repository import ActivityRepository
+from app.repositories.project_repository import ProjectRepository
 from app.schemas.activity import ActivityWrite
 from app.schemas.project import ProjectWrite
-from app.services.activity_service import ActivityService
-from app.services.project_service import ProjectService
 
 DEMO_PROJECT_NAME = "Portal de clientes (demo)"
 
@@ -55,15 +58,24 @@ DEMO_ACTIVITIES = [
 
 
 def seed_demo(session: Session) -> Project:
-    """Replace the demo project with a fresh copy and return it."""
-    projects = ProjectService(session)
-    for existing in projects.list_projects():
-        if existing.name == DEMO_PROJECT_NAME:
-            projects.delete_project(existing.id)
-    project = projects.create_project(DEMO_PROJECT)
-    activities = ActivityService(session)
-    for activity in DEMO_ACTIVITIES:
-        activities.create_activity(project.id, activity)
+    """Replace the demo project with a fresh copy, atomically, and return it.
+
+    The services commit after each write, so they are not used here: the repositories only
+    flush, and a single commit at the end makes the replacement all-or-nothing.
+    """
+    projects = ProjectRepository(session)
+    activities = ActivityRepository(session)
+    try:
+        for existing in projects.list_all():
+            if existing.name == DEMO_PROJECT_NAME:
+                projects.delete(existing)
+        project = projects.add(Project(**DEMO_PROJECT.model_dump()))
+        for activity in DEMO_ACTIVITIES:
+            activities.add(Activity(project_id=project.id, **activity.model_dump()))
+        session.commit()
+    except Exception:
+        session.rollback()
+        raise
     return project
 
 
