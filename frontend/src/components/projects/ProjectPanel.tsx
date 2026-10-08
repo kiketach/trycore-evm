@@ -48,7 +48,7 @@ export function ProjectPanel({ projects, selected, onSelect, onChanged }: Projec
 
   if (mode === 'create') {
     return (
-      <section aria-label="Nuevo proyecto">
+      <section aria-label="Nuevo proyecto" className="card">
         <h2>Nuevo proyecto</h2>
         {projects.length === 0 && <p>Aún no tienes proyectos. Crea el primero.</p>}
         <ProjectForm
@@ -62,7 +62,7 @@ export function ProjectPanel({ projects, selected, onSelect, onChanged }: Projec
 
   if (mode === 'edit' && selected !== null) {
     return (
-      <section aria-label="Editar proyecto">
+      <section aria-label="Editar proyecto" className="card">
         <h2>Editar proyecto</h2>
         <ProjectForm
           initial={selected}
@@ -75,7 +75,7 @@ export function ProjectPanel({ projects, selected, onSelect, onChanged }: Projec
   }
 
   return (
-    <section aria-label="Proyecto" className="project-panel">
+    <section aria-label="Proyecto" className="card project-panel">
       <label>
         Proyecto
         <select
@@ -89,23 +89,29 @@ export function ProjectPanel({ projects, selected, onSelect, onChanged }: Projec
           ))}
         </select>
       </label>
-      {selected?.cutoff_date && <span>Fecha de corte: {selected.cutoff_date}</span>}
+      {selected?.cutoff_date && <span className="meta-pill">Fecha de corte: {selected.cutoff_date}</span>}
       <div className="actions">
-        <button type="button" onClick={() => setMode('create')}>
+        <button type="button" className="button button--primary" onClick={() => setMode('create')}>
           Nuevo proyecto
         </button>
-        <button type="button" disabled={selected === null} onClick={() => setMode('edit')}>
+        <button
+          type="button"
+          className="button button--secondary"
+          disabled={selected === null}
+          onClick={() => setMode('edit')}
+        >
           Editar
         </button>
         <button
           type="button"
+          className="button button--danger"
           disabled={selected === null}
           onClick={() => selected !== null && void remove(selected)}
         >
           Eliminar
         </button>
       </div>
-      {selected?.description && <p className="muted">{selected.description}</p>}
+      {selected?.description && <p className="muted project-description">{selected.description}</p>}
       {error !== null && <p role="alert">{error}</p>}
     </section>
   )
