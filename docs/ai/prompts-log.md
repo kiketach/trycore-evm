@@ -242,3 +242,21 @@ Aprueba el PR #14 y mérgelo en develop. Después abre fix/number-wrapping como 
 ~~~~text
 Un ajuste que me di cuenta en el PR #15: a 1280px los montos negativos menores de un millón (ej. -999.999,99, unos 79px con la fuente del sistema) se salen 2px de la celda y se pegan visualmente con el valor de al lado. Dale más ancho a las columnas de indicadores para el negativo más largo posible en cualquier fuente de respaldo, sin abreviar 999.999,99. Verifica con capturas a 1440/1280/1279/390 con montos negativos grandes, y súbelo al mismo PR. Anota también como pendiente conocido que en celular las tarjetas del resumen se desbordan con montos enormes (existía desde antes, no es de este PR)
 ~~~~
+
+## Prompt 30 · 2026-10-08 12:04
+
+~~~~text
+Mergea el PR #15 a develop. Después cierra la entrega con Gitflow: crea release/1.0.1 desde develop con el bump de versión, abre PR a main, y cuando lo apruebe: merge, tag v1.0.1, y back-merge de main a develop
+~~~~
+
+## Prompt 31 · 2026-10-08 12:47
+
+~~~~text
+Commitea el AI_PROCESS.md en develop es una bitacora que agregué del proceso de trabajo y actualiza release/1.0.1 con develop para que el PR #16 incluya el documento final. Después del push espero el CI del PR #16
+~~~~
+
+## Prompt 32 · 2026-10-08 12:52
+
+~~~~text
+En AI_PROCESS.md, en la sección 2, cambia la frase «Gestioné 15 PRs: 14 se integraron» por «Gestioné 17 PRs: 16 se integraron» (el #16 es el release 1.0.1 y el #17 es este documento). Haz el commit en esta misma rama feature/ai-process-doc, push, y abre el PR a develop. Avisa cuando el CI esté en verde
+~~~~
