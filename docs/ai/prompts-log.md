@@ -170,3 +170,9 @@ Aprobado el PR #5 con un ajuste pequeño antes del merge: el test de PUT con val
 ~~~~text
 Aprueba el PR #6 y mérgealo en develop. Actualiza tu rama con los 91 tests. Ahora abre la rama frontend-setup: inicializa el proyecto frontend, conecta con el backend, y abre PR #7. Pide mi revisión antes de mergear.
 ~~~~
+
+## Prompt 18 · 2026-10-07 20:50
+
+~~~~text
+Aprueba el PR #7 y mérgelo en develop. Después abre la rama fix/rounding-status-exact desde develop: en el dominio EVM, calcula cost_status y schedule_status sobre los índices exactos sin redondear; el redondeo a 2 decimales solo aplica a lo que se muestra. Actualiza los tests unitarios (casos 0.9996 abajo, 1.0004 arriba y exacto), agrega el caso de límite en integración, y registra la decisión D-06 en DECISIONS.md. Abre PR #8 y pide mi revisión antes de mergear.
+~~~~
