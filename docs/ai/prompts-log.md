@@ -230,3 +230,9 @@ Revisa el log más reciente en logs/, la revisión del hook sigue avanzando (lí
 ~~~~text
 Aprueba el PR #13. Sigue Gitflow: merge a main, etiqueta v1.0.0 en main, y merge de main de vuelta a develop. Después abre feature/ui-polish como PR #14: mejora los estilos de botones y tarjetas y haz la tabla de actividades responsive sin scroll lateral. Mantén la estructura actual, sin sidebar. Pide mi revisión antes de mergear. La idea es hacer la interfaz mas intuitiva y facil de leer a primera vista
 ~~~~
+
+## Prompt 28 · 2026-10-08 11:11
+
+~~~~text
+Aprueba el PR #14 y mérgelo en develop. Después abre fix/number-wrapping como PR #15: los indicadores de la tabla no deben partir números a la mitad - ajusta anchos de columna, fuente o formato compacto para que montos de 7+ dígitos quepan en una línea a 1280px; y corrige el recorte del primer dígito en las etiquetas del eje Y de la gráfica. Pide mi revisión antes de mergear.
+~~~~
