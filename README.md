@@ -6,6 +6,7 @@ en tiempo real, los indicadores de Valor Ganado (PV, EV, AC, CV, SV, CPI, SPI, E
 ## Requisitos
 - Docker (con Docker Compose)
 - Python 3.12 y [uv](https://docs.astral.sh/uv/)
+- Node.js 22 y npm
 
 ## Correr en local
 
@@ -32,16 +33,31 @@ uv run uvicorn app.main:app --reload
 - API: http://localhost:8000
 - Documentación OpenAPI (Swagger UI): http://localhost:8000/api-docs
 
+### 3. Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+- Dashboard: http://localhost:5173
+- El servidor de Vite reenvía `/api/*` al backend (`http://localhost:8000`, configurable con la variable `BACKEND_URL`),
+  así el navegador habla con un solo origen y el backend no necesita CORS. El backend debe estar corriendo.
+
 ## Pruebas y linter
 ```bash
 cd backend
 uv run pytest            # las pruebas de integración necesitan la BD levantada
 uv run ruff check .
 uv run ruff format --check .
+
+cd ../frontend
+npm run lint
+npm run typecheck
+npm test
 ```
 
-El mismo flujo (BD con los scripts de `db/init/`, lint, formato y pruebas con el umbral de cobertura) corre en
-GitHub Actions en cada Pull Request hacia `develop` o `main`: [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
+El mismo flujo (backend: BD con los scripts de `db/init/`, lint, formato y pruebas con el umbral de cobertura;
+frontend: lint, tipos, pruebas y build) corre en GitHub Actions en cada Pull Request hacia `develop` o `main`: [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
 ## Documentos del proceso
 - [`AI_PROCESS.md`](AI_PROCESS.md): cómo usé la IA durante el ejercicio.
