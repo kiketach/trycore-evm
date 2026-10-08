@@ -25,18 +25,24 @@ export function ActivityRow({ activity, indicators, onSave, onDelete }: Activity
 
   return (
     <>
-      <tr>
+      <tr className="activity-row">
         <ActivityInputs draft={draft} rowLabel={activity.name} disabled={busy} onChange={setField} />
         <IndicatorCells indicators={indicators} />
         <td className="actions">
           <button
             type="button"
+            className="button button--primary button--small"
             disabled={!dirty || busy}
             onClick={() => void submit((data) => onSave(activity.id, data))}
           >
             Guardar
           </button>
-          <button type="button" disabled={busy} onClick={remove}>
+          <button
+            type="button"
+            className="button button--danger button--small"
+            disabled={busy}
+            onClick={remove}
+          >
             Eliminar
           </button>
         </td>

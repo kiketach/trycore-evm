@@ -212,3 +212,57 @@ Aprueba el PR #11 y mérgelo en develop. Después abre feature/demo-data-and-doc
 ~~~~text
 Aprueba el PR #12 y mérgelo en develop. Ahora la compuerta 3: repite la instalación desde un clon limpio (uv sync --locked, seed, pytest, npm ci, tests, build), y si todo pasa abre release/1.0.0 hacia main. Avísame con el resultado antes de mergear a main.
 ~~~~
+
+## Prompt 25 · 2026-10-08 09:50
+
+~~~~text
+ok espero
+~~~~
+
+## Prompt 26 · 2026-10-08 10:03
+
+~~~~text
+Revisa el log más reciente en logs/, la revisión del hook sigue avanzando (líneas nuevas, marcas de tiempo recientes) o está congelada?
+~~~~
+
+## Prompt 27 · 2026-10-08 10:27
+
+~~~~text
+Aprueba el PR #13. Sigue Gitflow: merge a main, etiqueta v1.0.0 en main, y merge de main de vuelta a develop. Después abre feature/ui-polish como PR #14: mejora los estilos de botones y tarjetas y haz la tabla de actividades responsive sin scroll lateral. Mantén la estructura actual, sin sidebar. Pide mi revisión antes de mergear. La idea es hacer la interfaz mas intuitiva y facil de leer a primera vista
+~~~~
+
+## Prompt 28 · 2026-10-08 11:11
+
+~~~~text
+Aprueba el PR #14 y mérgelo en develop. Después abre fix/number-wrapping como PR #15: los indicadores de la tabla no deben partir números a la mitad - ajusta anchos de columna, fuente o formato compacto para que montos de 7+ dígitos quepan en una línea a 1280px; y corrige el recorte del primer dígito en las etiquetas del eje Y de la gráfica. Pide mi revisión antes de mergear.
+~~~~
+
+## Prompt 29 · 2026-10-08 11:39
+
+~~~~text
+Un ajuste que me di cuenta en el PR #15: a 1280px los montos negativos menores de un millón (ej. -999.999,99, unos 79px con la fuente del sistema) se salen 2px de la celda y se pegan visualmente con el valor de al lado. Dale más ancho a las columnas de indicadores para el negativo más largo posible en cualquier fuente de respaldo, sin abreviar 999.999,99. Verifica con capturas a 1440/1280/1279/390 con montos negativos grandes, y súbelo al mismo PR. Anota también como pendiente conocido que en celular las tarjetas del resumen se desbordan con montos enormes (existía desde antes, no es de este PR)
+~~~~
+
+## Prompt 30 · 2026-10-08 12:04
+
+~~~~text
+Mergea el PR #15 a develop. Después cierra la entrega con Gitflow: crea release/1.0.1 desde develop con el bump de versión, abre PR a main, y cuando lo apruebe: merge, tag v1.0.1, y back-merge de main a develop
+~~~~
+
+## Prompt 31 · 2026-10-08 12:47
+
+~~~~text
+Commitea el AI_PROCESS.md en develop es una bitacora que agregué del proceso de trabajo y actualiza release/1.0.1 con develop para que el PR #16 incluya el documento final. Después del push espero el CI del PR #16
+~~~~
+
+## Prompt 32 · 2026-10-08 12:52
+
+~~~~text
+En AI_PROCESS.md, en la sección 2, cambia la frase «Gestioné 15 PRs: 14 se integraron» por «Gestioné 17 PRs: 16 se integraron» (el #16 es el release 1.0.1 y el #17 es este documento). Haz el commit en esta misma rama feature/ai-process-doc, push, y abre el PR a develop. Avisa cuando el CI esté en verde
+~~~~
+
+## Prompt 33 · 2026-10-08 13:20
+
+~~~~text
+Mergea el PR #17 a develop. Después actualiza release/1.0.1 con un merge de develop, push, y espera el CI del PR #16.
+~~~~

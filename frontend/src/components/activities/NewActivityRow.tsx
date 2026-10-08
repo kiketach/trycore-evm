@@ -18,11 +18,16 @@ export function NewActivityRow({ onCreate }: { onCreate: (data: ActivityWrite) =
 
   return (
     <>
-      <tr className="new-row">
+      <tr className="activity-row new-row">
         <ActivityInputs draft={draft} rowLabel={NEW_ROW_LABEL} disabled={busy} onChange={setField} />
         <IndicatorCells indicators={undefined} />
         <td className="actions">
-          <button type="button" disabled={busy} onClick={() => void add()}>
+          <button
+            type="button"
+            className="button button--primary button--small"
+            disabled={busy}
+            onClick={() => void add()}
+          >
             Agregar
           </button>
         </td>

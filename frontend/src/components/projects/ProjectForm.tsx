@@ -54,11 +54,16 @@ export function ProjectForm({ initial, submitLabel, onSubmit, onCancel }: Projec
         />
       </label>
       <div className="actions">
-        <button type="submit" disabled={busy}>
+        <button type="submit" className="button button--primary" disabled={busy}>
           {submitLabel}
         </button>
         {onCancel !== undefined && (
-          <button type="button" onClick={onCancel} disabled={busy}>
+          <button
+            type="button"
+            className="button button--secondary"
+            onClick={onCancel}
+            disabled={busy}
+          >
             Cancelar
           </button>
         )}

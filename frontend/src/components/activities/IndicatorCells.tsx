@@ -1,19 +1,20 @@
 import type { EvmIndicators } from '../../api/types'
 import { COST_STATUS, SCHEDULE_STATUS } from '../../evm/status'
-import { formatNumber, NOT_AVAILABLE_HINT } from '../../format'
+import { NOT_AVAILABLE_HINT } from '../../format'
+import { AmountValue } from '../evm/AmountValue'
 import { IndexValue } from '../evm/IndexValue'
 import { INDICATOR_COLUMNS } from './columns'
 
 export function IndicatorCells({ indicators }: { indicators: EvmIndicators | undefined }) {
   if (indicators === undefined) {
-    return <td colSpan={INDICATOR_COLUMNS.length} />
+    return <td colSpan={INDICATOR_COLUMNS.length} className="computed indicators-placeholder" />
   }
   return (
     <>
-      {INDICATOR_COLUMNS.map(({ key }) => {
+      {INDICATOR_COLUMNS.map(({ key, label }) => {
         if (key === 'cpi' || key === 'spi') {
           return (
-            <td key={key} className="number">
+            <td key={key} className="number computed" data-label={label}>
               <IndexValue
                 rounded={indicators[key]}
                 unrounded={key === 'cpi' ? indicators.cpi_exact : indicators.spi_exact}
@@ -28,8 +29,13 @@ export function IndicatorCells({ indicators }: { indicators: EvmIndicators | und
         }
         const value = indicators[key]
         return (
-          <td key={key} className="number" title={value === null ? NOT_AVAILABLE_HINT : undefined}>
-            {formatNumber(value)}
+          <td
+            key={key}
+            className="number computed"
+            data-label={label}
+            title={value === null ? NOT_AVAILABLE_HINT : undefined}
+          >
+            <AmountValue value={value} />
           </td>
         )
       })}

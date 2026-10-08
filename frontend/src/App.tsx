@@ -22,8 +22,10 @@ function App() {
 
   return (
     <main className="app">
-      <h1>Dashboard de Valor Ganado</h1>
-      <BackendStatus />
+      <header className="app-header">
+        <h1>Dashboard de Valor Ganado</h1>
+        <BackendStatus />
+      </header>
       {error !== null && <p role="alert">No se pudieron cargar los proyectos: {error}</p>}
       {projects === null ? (
         error === null && <p>Cargando proyectos…</p>
