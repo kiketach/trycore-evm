@@ -37,7 +37,8 @@ export function ActivitiesTable({ projectId, data, error, reload }: ActivitiesTa
       <h2>Actividades</h2>
       <p className="muted section-help">
         Escribe los datos de cada actividad y pulsa Guardar: los indicadores se recalculan al
-        instante. Pasa el cursor sobre un encabezado para ver su fórmula.
+        instante. Pasa el cursor sobre un encabezado para ver su fórmula. «M» significa millones:
+        pasa el cursor o enfoca el valor para ver la cifra completa.
       </p>
       {error !== null && <p role="alert">No se pudieron actualizar los datos: {error}</p>}
       <table className="activities-table">
