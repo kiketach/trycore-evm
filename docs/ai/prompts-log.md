@@ -260,3 +260,9 @@ Commitea el AI_PROCESS.md en develop es una bitacora que agregué del proceso de
 ~~~~text
 En AI_PROCESS.md, en la sección 2, cambia la frase «Gestioné 15 PRs: 14 se integraron» por «Gestioné 17 PRs: 16 se integraron» (el #16 es el release 1.0.1 y el #17 es este documento). Haz el commit en esta misma rama feature/ai-process-doc, push, y abre el PR a develop. Avisa cuando el CI esté en verde
 ~~~~
+
+## Prompt 33 · 2026-10-08 13:20
+
+~~~~text
+Mergea el PR #17 a develop. Después actualiza release/1.0.1 con un merge de develop, push, y espera el CI del PR #16.
+~~~~
