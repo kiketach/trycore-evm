@@ -550,9 +550,15 @@ th[title] {
 
 /* ---------- Activities table: fits its container, never scrolls sideways ---------- */
 
+/* The query container: the table switches to cards when its columns no longer fit, judged
+   in the units of the font actually rendered (ch), not in screen pixels. */
+.activities-frame {
+  container: activities / inline-size;
+  font-size: 0.8125rem;
+}
+
 .activities-table {
   table-layout: fixed;
-  font-size: 0.875rem;
 }
 
 .activities-table th,
@@ -560,28 +566,28 @@ th[title] {
   padding: 0.5rem 0.375rem;
 }
 
-/* Widths measured at 1280 px: an indicator cell keeps ~72 px of text, enough for the
-   longest value it can show ("-999.999,99" or "-9.999,99 M" at 13 px) on one line. */
-.activities-table .col-name {
-  width: 13%;
+/* Widths in ch (width of "0" in the rendered font), so they grow with wider fallback fonts.
+   The longest unabbreviated value, "-999.999,99", is 11 characters: it measured 9.54-9.85ch
+   in proportional fonts (Segoe UI, Arial, Roboto, Tahoma, Calibri, Verdana) and exactly 11ch
+   in a monospace font. 11ch covers any font whose signs are no wider than a digit.
+   The name column takes whatever is left. */
+.activities-table .col-indicator {
+  width: calc(11ch + 0.5rem);
 }
 
 .activities-table .col-bac,
 .activities-table .col-actual_cost {
-  width: 7%;
+  width: calc(10ch + 1.125rem);
 }
 
+/* 7ch: enough for the header word "planeado" as well as values like "99,96". */
 .activities-table .col-planned_percent,
 .activities-table .col-actual_percent {
-  width: 5.5%;
-}
-
-.activities-table .col-indicator {
-  width: 6.75%;
+  width: calc(7ch + 1.125rem);
 }
 
 .activities-table .col-actions {
-  width: 8%;
+  width: calc(8ch + 2rem);
 }
 
 .activities-table .group-header th {
@@ -599,7 +605,6 @@ th[title] {
 
 .activities-table td.computed {
   padding-inline: 0.25rem;
-  font-size: 0.8125rem;
 }
 
 /* A number is never split across lines. */
@@ -611,7 +616,7 @@ th[title] {
   width: 100%;
   min-height: 2rem;
   padding: 0.25rem;
-  font-size: 0.8125rem;
+  font-size: inherit;
 }
 
 .activities-table td.input-cell {
@@ -665,9 +670,10 @@ th[title] {
   font-weight: 600;
 }
 
-/* Below 1280 px the columns would get too narrow for a full amount: each activity becomes a
-   card; labels come from data-label. Range syntax leaves no gap at fractional widths (zoom). */
-@media (width < 1280px) {
+/* Cards when the columns above (8 indicators, 4 inputs, actions and a 12ch name) do not fit:
+   142ch + 11.25rem. In ch, so a wide fallback font switches to cards instead of overflowing.
+   Each activity becomes a card; labels come from data-label. */
+@container activities (width < calc(142ch + 11.25rem)) {
   .activities-table,
   .activities-table tbody {
     display: block;
@@ -751,12 +757,14 @@ th[title] {
   }
 }
 
-/* Phones: two columns, so inputs and values keep a readable width. */
-@media (width < 600px) {
+/* Narrow containers (phones): two columns, so inputs and values keep a readable width. */
+@container activities (width < 60ch) {
   .activities-table tr.activity-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
 
+@media (width < 600px) {
   .project-panel .actions {
     margin-left: 0;
   }
