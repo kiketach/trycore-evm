@@ -266,3 +266,15 @@ En AI_PROCESS.md, en la sección 2, cambia la frase «Gestioné 15 PRs: 14 se in
 ~~~~text
 Mergea el PR #17 a develop. Después actualiza release/1.0.1 con un merge de develop, push, y espera el CI del PR #16.
 ~~~~
+
+## Prompt 34 · 2026-10-08 13:47
+
+~~~~text
+listo Mergea el PR #16 a main. Después: etiqueta v1.0.1 en main, y merge de main de vuelta a develop. Confírmame los hashes del merge, del tag y del back-merge.
+~~~~
+
+## Prompt 35 · 2026-10-08 14:00
+
+~~~~text
+El brief exige los prompts DENTRO de AI_PROCESS.md. Crea hotfix/1.0.2 desde main. En la sección 2 de AI_PROCESS.md, copia los prompts 1-33 de docs/ai/prompts-log.md textualmente y en orden, sin resumir ni parafrasear, y ajusta la intro de la sección para decir que están copiados abajo y que el log continúa en docs/ai/. Bump a 1.0.2 y abre PR a main. Verifica con un diff que los 33 cuerpos sean idénticos al log.
+~~~~
