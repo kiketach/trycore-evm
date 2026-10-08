@@ -2,7 +2,7 @@ import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { type FakeBackend, installFakeBackend } from '../../test/fakeBackend'
-import { ActivitiesTable } from './ActivitiesTable'
+import { ProjectDashboard } from '../ProjectDashboard'
 
 const LOGIN = {
   name: 'Login',
@@ -34,7 +34,7 @@ describe('ActivitiesTable', () => {
       pv: 5000, ev: 4000, cv: 800, sv: -1000, cpi: 1.25, spi: 0.8, eac: 8000, vac: 2000,
     })  // prettier-ignore
 
-    render(<ActivitiesTable projectId={projectId} />)
+    render(<ProjectDashboard projectId={projectId} />)
 
     const row = await findRow('Login')
     expect(within(row).getByLabelText('BAC de Login')).toHaveValue(10000)
@@ -46,20 +46,52 @@ describe('ActivitiesTable', () => {
 
   it('shows N/D with an explanation for indicators that could not be computed', async () => {
     backend.addActivity(projectId, { ...LOGIN, actual_cost: 0 })
-    backend.indicators.set('Login', { cpi: null, eac: null, vac: null, spi: 0.8 })
+    backend.indicators.set('Login', {
+      cpi: null, cpi_exact: null, eac: null, vac: null,
+      spi: 0.8, spi_exact: 0.8, schedule_status: 'BEHIND',
+    })  // prettier-ignore
 
-    render(<ActivitiesTable projectId={projectId} />)
+    render(<ProjectDashboard projectId={projectId} />)
 
-    const notAvailable = within(await findRow('Login')).getAllByText('N/D')
-    expect(notAvailable).toHaveLength(3)
-    expect(notAvailable[0]).toHaveAttribute('title', 'No disponible: la fórmula dividiría por cero.')
+    const row = await findRow('Login')
+    expect(within(row).getAllByText('N/D')).toHaveLength(3)
+    const hint = 'No disponible: la fórmula dividiría por cero.'
+    expect(within(row).getByText(hint, { selector: '.visually-hidden' })).toBeInTheDocument()
+    expect(within(row).getAllByTitle(hint)).toHaveLength(2)
+  })
+
+  it('announces the CPI and SPI status of each row and reaches it by keyboard', async () => {
+    backend.addActivity(projectId, LOGIN)
+    backend.indicators.set('Login', {
+      cpi: 1.25, cpi_exact: 1.25, cost_status: 'UNDER_BUDGET',
+      spi: 0.8, spi_exact: 0.8, schedule_status: 'BEHIND',
+    })  // prettier-ignore
+    const user = userEvent.setup()
+    render(<ProjectDashboard projectId={projectId} />)
+
+    const row = await findRow('Login')
+    const cpi = within(row).getByText('Bajo presupuesto. Valor sin redondear: 1,25', {
+      selector: '.visually-hidden',
+    })
+    const spi = within(row).getByText('Atrasado. Valor sin redondear: 0,80', {
+      selector: '.visually-hidden',
+    })
+
+    const cpiValue = cpi.closest('.index-value')
+    expect(cpiValue).toHaveAttribute('tabindex', '0')
+    for (let step = 0; step < 50 && document.activeElement !== cpiValue; step++) {
+      await user.tab()
+    }
+    expect(cpiValue).toHaveFocus()
+    await user.tab()
+    expect(spi.closest('.index-value')).toHaveFocus()
   })
 
   it('saves an edited row and refreshes the indicators from the backend', async () => {
     const login = backend.addActivity(projectId, LOGIN)
     backend.indicators.set('Login', { cpi: 1.25 })
     const user = userEvent.setup()
-    render(<ActivitiesTable projectId={projectId} />)
+    render(<ProjectDashboard projectId={projectId} />)
     const save = within(await findRow('Login')).getByRole('button', { name: 'Guardar' })
     expect(save).toBeDisabled()
 
@@ -81,7 +113,7 @@ describe('ActivitiesTable', () => {
   it('rejects invalid values in Spanish without calling the backend', async () => {
     backend.addActivity(projectId, LOGIN)
     const user = userEvent.setup()
-    render(<ActivitiesTable projectId={projectId} />)
+    render(<ProjectDashboard projectId={projectId} />)
 
     const bac = await screen.findByLabelText('BAC de Login')
     await user.clear(bac)
@@ -104,7 +136,7 @@ describe('ActivitiesTable', () => {
       ),
     )
     const user = userEvent.setup()
-    render(<ActivitiesTable projectId={projectId} />)
+    render(<ProjectDashboard projectId={projectId} />)
 
     const bac = await screen.findByLabelText('BAC de Login')
     await user.clear(bac)
@@ -118,7 +150,7 @@ describe('ActivitiesTable', () => {
 
   it('adds an activity from the last row and clears it', async () => {
     const user = userEvent.setup()
-    render(<ActivitiesTable projectId={projectId} />)
+    render(<ProjectDashboard projectId={projectId} />)
     expect(
       await screen.findByText(/Este proyecto aún no tiene actividades/),
     ).toBeInTheDocument()
@@ -141,7 +173,7 @@ describe('ActivitiesTable', () => {
     const login = backend.addActivity(projectId, LOGIN)
     const confirm = vi.spyOn(window, 'confirm').mockReturnValueOnce(false).mockReturnValueOnce(true)
     const user = userEvent.setup()
-    render(<ActivitiesTable projectId={projectId} />)
+    render(<ProjectDashboard projectId={projectId} />)
     const path = `/projects/${String(projectId)}/activities/${String(login.id)}`
 
     await user.click(within(await findRow('Login')).getByRole('button', { name: 'Eliminar' }))
@@ -162,7 +194,7 @@ describe('ActivitiesTable', () => {
       Response.json({ detail: 'Database unavailable' }, { status: 503 }),
     )
 
-    render(<ActivitiesTable projectId={projectId} />)
+    render(<ProjectDashboard projectId={projectId} />)
 
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'No se pudieron cargar las actividades: Database unavailable',

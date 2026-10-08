@@ -231,6 +231,9 @@ def test_status_is_interpreted_on_the_exact_index_not_the_rounded_one(progress, 
     result = calculate_activity(activity("10000", planned, actual, cost))
 
     assert (result.cpi, result.spi) == (Decimal("1.00"), Decimal("1.00"))
+    ev = Decimal("10000") * Decimal(actual) / 100
+    assert result.cpi_exact == ev / Decimal(cost)
+    assert result.spi_exact == ev / (Decimal("10000") * Decimal(planned) / 100)
     assert result.cost_status is cost_status
     assert result.schedule_status is schedule_status
     assert (result.eac, result.vac) == (Decimal(eac), Decimal(vac))

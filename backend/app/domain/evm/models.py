@@ -40,6 +40,9 @@ class EvmIndicators:
     sv: Decimal
     cpi: Decimal | None
     spi: Decimal | None
+    # Unrounded indices: the statuses are read from these (D-06), and the UI shows them on demand.
+    cpi_exact: Decimal | None
+    spi_exact: Decimal | None
     eac: Decimal | None
     vac: Decimal | None
     cost_status: CostStatus

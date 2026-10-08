@@ -1,22 +1,20 @@
 import { createActivity, deleteActivity, updateActivity } from '../../api/activities'
 import type { ActivityWrite } from '../../api/types'
 import { ACTIVITY_FIELDS, FIELD_LABELS } from '../../activities/draft'
-import { useProjectActivities } from '../../hooks/useProjectActivities'
+import type { ProjectActivities } from '../../hooks/useProjectActivities'
 import { ActivityRow } from './ActivityRow'
 import { INDICATOR_COLUMNS, TOTAL_COLUMNS } from './columns'
 import { NewActivityRow } from './NewActivityRow'
 
-export function ActivitiesTable({ projectId }: { projectId: number }) {
-  const { data, error, reload } = useProjectActivities(projectId)
+interface ActivitiesTableProps {
+  projectId: number
+  data: ProjectActivities
+  // Set when a reload after a change failed; the table keeps the last good data.
+  error: string | null
+  reload: () => void
+}
 
-  if (data === null) {
-    return error === null ? (
-      <p>Cargando actividades…</p>
-    ) : (
-      <p role="alert">No se pudieron cargar las actividades: {error}</p>
-    )
-  }
-
+export function ActivitiesTable({ projectId, data, error, reload }: ActivitiesTableProps) {
   const indicatorsById = new Map(data.evm.activities.map((a) => [a.activity_id, a]))
 
   async function create(values: ActivityWrite) {

@@ -25,6 +25,12 @@ class EvmIndicatorsResponse(BaseModel):
     spi: DecimalAsNumber | None = Field(
         description="Schedule Performance Index = EV / PV, two decimals." + NOT_COMPUTABLE
     )
+    cpi_exact: DecimalAsNumber | None = Field(
+        description="CPI before rounding; cost_status is read from it." + NOT_COMPUTABLE
+    )
+    spi_exact: DecimalAsNumber | None = Field(
+        description="SPI before rounding; schedule_status is read from it." + NOT_COMPUTABLE
+    )
     eac: DecimalAsNumber | None = Field(
         description=(
             "Estimate at Completion = BAC / CPI. Null without cost performance data "

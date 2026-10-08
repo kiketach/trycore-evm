@@ -1,7 +1,10 @@
 import type { EvmIndicators } from '../../api/types'
 import { ACTIVITY_FIELDS } from '../../activities/draft'
 
-export type IndicatorKey = keyof Omit<EvmIndicators, 'bac' | 'ac' | 'cost_status' | 'schedule_status'>
+export type IndicatorKey = keyof Omit<
+  EvmIndicators,
+  'bac' | 'ac' | 'cpi_exact' | 'spi_exact' | 'cost_status' | 'schedule_status'
+>
 
 // BAC and AC are already editable inputs; these are the read-only computed columns.
 export const INDICATOR_COLUMNS: readonly { key: IndicatorKey; label: string; title: string }[] = [

@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { ActivitiesTable } from './components/activities/ActivitiesTable'
 import { BackendStatus } from './components/BackendStatus'
+import { ProjectDashboard } from './components/ProjectDashboard'
 import { ProjectPanel } from './components/projects/ProjectPanel'
 import { useProjects } from './hooks/useProjects'
 
@@ -35,7 +35,7 @@ function App() {
             onSelect={setSelectedId}
             onChanged={handleChanged}
           />
-          {selected !== null && <ActivitiesTable key={selected.id} projectId={selected.id} />}
+          {selected !== null && <ProjectDashboard key={selected.id} projectId={selected.id} />}
         </>
       )}
     </main>

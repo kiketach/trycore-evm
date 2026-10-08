@@ -54,6 +54,8 @@ def _indicators_from_totals(bac: Decimal, pv: Decimal, ev: Decimal, ac: Decimal)
         sv=_round_money(ev - pv),
         cpi=_round_index(cpi),
         spi=_round_index(spi),
+        cpi_exact=cpi,
+        spi_exact=spi,
         eac=_round_money(eac) if eac is not None else None,
         vac=_round_money(bac - eac) if eac is not None else None,
         # Interpreted on the exact index: rounding is for display only, so a CPI of 0.9996

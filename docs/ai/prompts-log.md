@@ -182,3 +182,15 @@ Aprueba el PR #7 y mérgelo en develop. Después abre la rama fix/rounding-statu
 ~~~~text
 El número exacto es la verdad del proyecto; el redondeo es solo presentación. Que una etiqueta cambie por 0.0004 de redondeo le miente a quien toma decisiones. Prefiero mostrar 1,00 en rojo y explicarlo, a mostrar 1,00 en verde y que sea falso. Escribe D-06 en DECISIONS.md con esa razón y súbela al PR. Después renombra la rama a bugfix/rounding-status-exact siguiendo Gitflow, y cuando esté todo, mérgelo en develop. Avísame el SHA del merge y abre feature/activities-table como PR #9. Pide mi revisión antes de mergear
 ~~~~
+
+## Prompt 20 · 2026-10-07 22:04
+
+~~~~text
+Aprueba el PR #10 y mérgelo en develop. Después abre feature/evm-dashboard como PR #11: indicadores consolidados del proyecto, semáforo de CPI y SPI, gráfica PV/EV/AC, y tooltip con el valor exacto en los índices para explicar el 1,00 en rojo de D-06. Pide mi revisión antes de mergear.
+~~~~
+
+## Prompt 21 · 2026-10-08 08:12
+
+~~~~text
+Hay  2 problemas en el PR #11, corrígelos en la misma rama: (1) el tooltip del valor exacto lo redondea a 6 decimales en format.ts, así un cpi_exact de 0,9999996 se muestra como 1,00 y el tooltip deja de explicar el estado; muestra el valor tal como llega del backend o usa precisión adaptativa que nunca colapse un valor distinto de 1 en 1,00, y agrega tests de esos casos límite. (2) En la tabla, la celda CPI/SPI (IndexValue/IndicatorCells) solo tiene ícono aria-hidden y número: el estado no es accesible por teclado ni por lector de pantalla. Agrega el texto de estado accesible en la celda y un test. Sube los cambios al PR #11 y avísame para nueva revisión.
+~~~~
