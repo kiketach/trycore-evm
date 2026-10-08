@@ -36,14 +36,16 @@ class EvmIndicatorsResponse(BaseModel):
     )
     cost_status: CostStatus = Field(
         description=(
-            "Interpretation of CPI: UNDER_BUDGET (> 1), ON_BUDGET (= 1), "
-            "OVER_BUDGET (< 1), NOT_AVAILABLE (CPI null)."
+            "Interpretation of the exact, unrounded CPI: UNDER_BUDGET (> 1), ON_BUDGET (= 1), "
+            "OVER_BUDGET (< 1), NOT_AVAILABLE (CPI null). A CPI shown as 1.00 can therefore "
+            "read OVER_BUDGET (exact 0.9996) or UNDER_BUDGET (exact 1.0004)."
         )
     )
     schedule_status: ScheduleStatus = Field(
         description=(
-            "Interpretation of SPI: AHEAD (> 1), ON_SCHEDULE (= 1), BEHIND (< 1), "
-            "NOT_AVAILABLE (SPI null)."
+            "Interpretation of the exact, unrounded SPI: AHEAD (> 1), ON_SCHEDULE (= 1), "
+            "BEHIND (< 1), NOT_AVAILABLE (SPI null). An SPI shown as 1.00 can therefore read "
+            "BEHIND or AHEAD."
         )
     )
 
