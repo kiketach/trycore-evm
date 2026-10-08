@@ -182,3 +182,9 @@ Aprueba el PR #7 y mérgelo en develop. Después abre la rama fix/rounding-statu
 ~~~~text
 El número exacto es la verdad del proyecto; el redondeo es solo presentación. Que una etiqueta cambie por 0.0004 de redondeo le miente a quien toma decisiones. Prefiero mostrar 1,00 en rojo y explicarlo, a mostrar 1,00 en verde y que sea falso. Escribe D-06 en DECISIONS.md con esa razón y súbela al PR. Después renombra la rama a bugfix/rounding-status-exact siguiendo Gitflow, y cuando esté todo, mérgelo en develop. Avísame el SHA del merge y abre feature/activities-table como PR #9. Pide mi revisión antes de mergear
 ~~~~
+
+## Prompt 20 · 2026-10-07 22:04
+
+~~~~text
+Aprueba el PR #10 y mérgelo en develop. Después abre feature/evm-dashboard como PR #11: indicadores consolidados del proyecto, semáforo de CPI y SPI, gráfica PV/EV/AC, y tooltip con el valor exacto en los índices para explicar el 1,00 en rojo de D-06. Pide mi revisión antes de mergear.
+~~~~
