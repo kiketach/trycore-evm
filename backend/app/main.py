@@ -4,7 +4,7 @@ from app.api.errors import register_error_handlers
 from app.api.routes import activities, evm, health, projects
 
 API_TITLE = "EVM Dashboard API"
-API_VERSION = "0.1.0"
+API_VERSION = "1.0.0"
 API_DESCRIPTION = (
     "REST API to manage projects and activities and compute their Earned Value Management "
     "indicators (PV, EV, CV, SV, CPI, SPI, EAC, VAC)."
