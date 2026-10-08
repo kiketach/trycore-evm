@@ -196,19 +196,44 @@ def test_project_cpi_exists_even_when_one_activity_has_no_cost():
     assert project.cost_status is CostStatus.UNDER_BUDGET
 
 
-def test_status_follows_the_rounded_index_shown_to_the_user():
-    """EV 9,996 and AC 10,000: CPI 0.9996 is shown as 1.00, so it reads ON_BUDGET.
+@pytest.mark.parametrize(
+    ("progress", "expected"),
+    [
+        pytest.param(
+            ("100", "99.96", "10000"),
+            (CostStatus.OVER_BUDGET, ScheduleStatus.BEHIND, "10004.00", "-4.00"),
+            id="just-below-1",
+        ),
+        pytest.param(
+            ("99.96", "100", "9996"),
+            (CostStatus.UNDER_BUDGET, ScheduleStatus.AHEAD, "9996.00", "4.00"),
+            id="just-above-1",
+        ),
+        pytest.param(
+            ("50", "50", "5000"),
+            (CostStatus.ON_BUDGET, ScheduleStatus.ON_SCHEDULE, "10000.00", "0.00"),
+            id="exactly-1",
+        ),
+    ],
+)
+def test_status_is_interpreted_on_the_exact_index_not_the_rounded_one(progress, expected):
+    """All three show CPI and SPI as 1.00; the status reads the exact value behind it.
 
-    EAC still uses the unrounded CPI: 10,000 / 0.9996 = 10,004.00; VAC = -4.00
+    progress = (planned %, actual %, AC) on BAC 10,000
+    just-below-1:  EV 9,996 / AC 10,000 = 0.9996 (CPI and SPI)  -> over budget, behind
+    just-above-1:  EV 10,000 / AC 9,996 = 1.0004; EV / PV 9,996 -> under budget, ahead
+    exactly-1:     EV = PV = AC = 5,000                        -> on budget, on schedule
+    EAC uses the exact CPI too: 10,000 / 0.9996 = 10,004.00; 10,000 / 1.0004 = 9,996.00
     """
-    result = calculate_activity(activity("10000", "100", "99.96", "10000"))
+    planned, actual, cost = progress
+    cost_status, schedule_status, eac, vac = expected
 
-    assert result.cpi == Decimal("1.00")
-    assert result.cost_status is CostStatus.ON_BUDGET
-    assert result.spi == Decimal("1.00")
-    assert result.schedule_status is ScheduleStatus.ON_SCHEDULE
-    assert result.eac == Decimal("10004.00")
-    assert result.vac == Decimal("-4.00")
+    result = calculate_activity(activity("10000", planned, actual, cost))
+
+    assert (result.cpi, result.spi) == (Decimal("1.00"), Decimal("1.00"))
+    assert result.cost_status is cost_status
+    assert result.schedule_status is schedule_status
+    assert (result.eac, result.vac) == (Decimal(eac), Decimal(vac))
 
 
 def test_indices_round_half_up():

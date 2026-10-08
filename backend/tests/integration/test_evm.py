@@ -25,7 +25,7 @@ PROJECT_EVM_FIELDS = {"project_id", "project_name", "cutoff_date", "summary", "a
 MISSING_ID = 999_999
 
 
-def activity(name: str, bac: int, planned: int, actual: int, cost: int) -> dict:
+def activity(name: str, bac: float, planned: float, actual: float, cost: float) -> dict:
     return {
         "name": name,
         "bac": bac,
@@ -135,6 +135,34 @@ def test_indicators_reflect_an_activity_edit_immediately(client: TestClient) -> 
     summary = get_evm(client, project_id)["summary"]
     assert (summary["cpi"], summary["cost_status"]) == (0.8, "OVER_BUDGET")
     assert (summary["eac"], summary["vac"]) == (12500, -2500)
+
+
+@pytest.mark.parametrize(
+    ("boundary_activity", "cost_status", "schedule_status"),
+    [
+        pytest.param(
+            activity("Casi en presupuesto", 10000, 100, 99.96, 10000),
+            "OVER_BUDGET",
+            "BEHIND",
+            id="exact-0.9996-shown-1.00",
+        ),
+        pytest.param(
+            activity("Apenas adelantada", 10000, 99.96, 100, 9996),
+            "UNDER_BUDGET",
+            "AHEAD",
+            id="exact-1.0004-shown-1.00",
+        ),
+    ],
+)
+def test_status_reads_the_exact_index_while_the_value_is_shown_rounded(
+    client: TestClient, boundary_activity: dict, cost_status: str, schedule_status: str
+) -> None:
+    evm = get_evm(client, create_project(client, [boundary_activity]))
+
+    for indicators in (evm["summary"], evm["activities"][0]):
+        assert (indicators["cpi"], indicators["spi"]) == (1.0, 1.0)
+        assert indicators["cost_status"] == cost_status
+        assert indicators["schedule_status"] == schedule_status
 
 
 def test_evm_of_missing_project_returns_404(client: TestClient) -> None:

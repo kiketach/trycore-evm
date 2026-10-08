@@ -58,3 +58,10 @@ Reglas:
 - **Cómo lo verifiqué:** `gh api repos/actions/checkout/git/matching-refs/tags/v7` → `refs/tags/v7`, `v7.0.0`, `v7.0.1`. La ejecución real del CI en el PR #2 (run `37695191075`, commit `782f63a`) terminó en verde: `Run actions/checkout@v7` → success, lint limpio, 3 tests pasan y cobertura de la capa de negocio 100 %.
 - **Qué salió de aquí:** una mejora del revisor en una rama aparte (`feature/verify-remote-versions` en `~/.claude/scripts`): el motor resuelve contra GitHub, PyPI y npm cada versión que agrega el diff y se la pasa al revisor como evidencia verificada; solo puede afirmar que una versión no existe si el registro lo dice. Mientras esa mejora no esté activa o `ci.yml` no llegue a `main`, cada push que toque `ci.yml` puede volver a bloquearse con este mismo hallazgo falso, porque el revisor no es determinista (documentado en el PR #2).
 - **Prompt relacionado:** Prompts 10 y 11 en `docs/ai/prompts-log.md`
+
+### D-06 · El estado de CPI y SPI se interpreta sobre el índice exacto · 2026-10-07 20:50
+- **Qué propuso la IA:** redondear CPI y SPI a 2 decimales e interpretar el estado sobre el valor redondeado, para que la etiqueta siempre coincidiera con el número mostrado (un CPI exacto de 0,9996 se mostraba como 1,00 y se leía `ON_BUDGET`). Se aprobó con el plan y se implementó en el PR #3.
+- **Qué decidí:** interpretar sobre el índice exacto; el redondeo solo aplica a lo que se muestra. Con 0,9996 se muestra 1,00 y se lee `OVER_BUDGET`; con 1,0004, `UNDER_BUDGET`.
+- **Mi razón:** «El número exacto es la verdad del proyecto; el redondeo es solo presentación. Que una etiqueta cambie por 0.0004 de redondeo le miente a quien toma decisiones. Prefiero mostrar 1,00 en rojo y explicarlo, a mostrar 1,00 en verde y que sea falso».
+- **Cómo lo verifiqué:** tests unitarios y de integración de los tres casos de límite (0,9996, 1,0004 y exactamente 1, todos mostrados como 1,00); al reaplicar la regla del redondeo fallan exactamente los 4 casos de límite.
+- **Prompt relacionado:** Prompts 18 y 19 en `docs/ai/prompts-log.md`

@@ -45,8 +45,6 @@ def _indicators_from_totals(bac: Decimal, pv: Decimal, ev: Decimal, ac: Decimal)
     cpi = _ratio(ev, ac)
     spi = _ratio(ev, pv)
     eac = _estimate_at_completion(bac, cpi)
-    rounded_cpi = _round_index(cpi)
-    rounded_spi = _round_index(spi)
     return EvmIndicators(
         bac=_round_money(bac),
         pv=_round_money(pv),
@@ -54,13 +52,14 @@ def _indicators_from_totals(bac: Decimal, pv: Decimal, ev: Decimal, ac: Decimal)
         ac=_round_money(ac),
         cv=_round_money(ev - ac),
         sv=_round_money(ev - pv),
-        cpi=rounded_cpi,
-        spi=rounded_spi,
+        cpi=_round_index(cpi),
+        spi=_round_index(spi),
         eac=_round_money(eac) if eac is not None else None,
         vac=_round_money(bac - eac) if eac is not None else None,
-        # Interpreted on the rounded index so the label always matches the number shown.
-        cost_status=interpret_cpi(rounded_cpi),
-        schedule_status=interpret_spi(rounded_spi),
+        # Interpreted on the exact index: rounding is for display only, so a CPI of 0.9996
+        # is shown as 1.00 but still reads OVER_BUDGET.
+        cost_status=interpret_cpi(cpi),
+        schedule_status=interpret_spi(spi),
     )
 
 
