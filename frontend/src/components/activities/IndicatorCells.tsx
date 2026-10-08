@@ -1,6 +1,7 @@
 import type { EvmIndicators } from '../../api/types'
 import { COST_STATUS, SCHEDULE_STATUS } from '../../evm/status'
-import { formatNumber, NOT_AVAILABLE_HINT } from '../../format'
+import { NOT_AVAILABLE_HINT } from '../../format'
+import { AmountValue } from '../evm/AmountValue'
 import { IndexValue } from '../evm/IndexValue'
 import { INDICATOR_COLUMNS } from './columns'
 
@@ -34,7 +35,7 @@ export function IndicatorCells({ indicators }: { indicators: EvmIndicators | und
             data-label={label}
             title={value === null ? NOT_AVAILABLE_HINT : undefined}
           >
-            {formatNumber(value)}
+            <AmountValue value={value} />
           </td>
         )
       })}

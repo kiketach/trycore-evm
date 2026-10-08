@@ -230,3 +230,15 @@ Revisa el log más reciente en logs/, la revisión del hook sigue avanzando (lí
 ~~~~text
 Aprueba el PR #13. Sigue Gitflow: merge a main, etiqueta v1.0.0 en main, y merge de main de vuelta a develop. Después abre feature/ui-polish como PR #14: mejora los estilos de botones y tarjetas y haz la tabla de actividades responsive sin scroll lateral. Mantén la estructura actual, sin sidebar. Pide mi revisión antes de mergear. La idea es hacer la interfaz mas intuitiva y facil de leer a primera vista
 ~~~~
+
+## Prompt 28 · 2026-10-08 11:11
+
+~~~~text
+Aprueba el PR #14 y mérgelo en develop. Después abre fix/number-wrapping como PR #15: los indicadores de la tabla no deben partir números a la mitad - ajusta anchos de columna, fuente o formato compacto para que montos de 7+ dígitos quepan en una línea a 1280px; y corrige el recorte del primer dígito en las etiquetas del eje Y de la gráfica. Pide mi revisión antes de mergear.
+~~~~
+
+## Prompt 29 · 2026-10-08 11:39
+
+~~~~text
+Un ajuste que me di cuenta en el PR #15: a 1280px los montos negativos menores de un millón (ej. -999.999,99, unos 79px con la fuente del sistema) se salen 2px de la celda y se pegan visualmente con el valor de al lado. Dale más ancho a las columnas de indicadores para el negativo más largo posible en cualquier fuente de respaldo, sin abreviar 999.999,99. Verifica con capturas a 1440/1280/1279/390 con montos negativos grandes, y súbelo al mismo PR. Anota también como pendiente conocido que en celular las tarjetas del resumen se desbordan con montos enormes (existía desde antes, no es de este PR)
+~~~~

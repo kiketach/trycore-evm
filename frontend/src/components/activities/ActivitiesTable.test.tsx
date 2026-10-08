@@ -121,6 +121,19 @@ describe('ActivitiesTable', () => {
     expect(within(row).getByRole('button', { name: 'Eliminar' })).toHaveClass('button--danger')
   })
 
+  it('abbreviates indicator amounts from a million up instead of splitting them', async () => {
+    backend.addActivity(projectId, { ...LOGIN, bac: 1234567.89 })
+    backend.indicators.set('Login', { pv: 740740.73, eac: 2194787.38 })
+    render(<ProjectDashboard projectId={projectId} />)
+
+    const row = await findRow('Login')
+    expect(within(row).getByText('740.740,73')).toBeInTheDocument()
+    expect(within(row).getByText('2,19 M')).toBeInTheDocument()
+    expect(
+      within(row).getByText('2.194.787,38', { selector: '.visually-hidden' }),
+    ).toBeInTheDocument()
+  })
+
   it('saves an edited row and refreshes the indicators from the backend', async () => {
     const login = backend.addActivity(projectId, LOGIN)
     backend.indicators.set('Login', { cpi: 1.25 })

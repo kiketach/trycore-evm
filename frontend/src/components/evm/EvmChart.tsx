@@ -9,7 +9,7 @@ import {
   YAxis,
 } from 'recharts'
 import type { ActivityEvm } from '../../api/types'
-import { formatNumber } from '../../format'
+import { formatAxisTick, formatNumber } from '../../format'
 
 // Categorical slots 1-3 of the validated reference palette (dataviz skill), fixed order.
 const SERIES = [
@@ -48,7 +48,7 @@ export function EvmChart({ activities }: { activities: ActivityEvm[] }) {
           <BarChart data={activities} barGap={BAR_GAP} margin={{ top: 8, right: 8, left: 8, bottom: 8 }}>
             <CartesianGrid vertical={false} stroke="var(--grid)" />
             <XAxis dataKey="name" tick={{ fill: 'var(--color-muted)' }} />
-            <YAxis tickFormatter={formatNumber} tick={{ fill: 'var(--color-muted)' }} width={96} />
+            <YAxis tickFormatter={formatAxisTick} tick={{ fill: 'var(--color-muted)' }} width="auto" />
             <Tooltip formatter={formatTooltipValue} cursor={{ fill: 'var(--hover)' }} />
             <Legend itemSorter={null} formatter={legendLabel} />
             {SERIES.map(({ key, label, color }) => (
