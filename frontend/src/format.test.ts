@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { formatNumber, formatUnrounded, NOT_AVAILABLE_TEXT, unroundedHint } from './format'
+import {
+  formatAmountShort,
+  formatAxisTick,
+  formatNumber,
+  formatUnrounded,
+  NOT_AVAILABLE_TEXT,
+  unroundedHint,
+} from './format'
 
 describe('formatNumber', () => {
   it('uses Colombian separators and always two decimals', () => {
@@ -51,5 +58,36 @@ describe('formatUnrounded', () => {
         expect(Math.sign(shown - 1)).toBe(Math.sign(value - 1))
       }
     }
+  })
+})
+
+describe('formatAmountShort', () => {
+  it.each([
+    [999999.99, '999.999,99'],
+    [-999999.99, '-999.999,99'],
+    [1000000, '1,00 M'],
+    [1234567.89, '1,23 M'],
+    [-6666666.66, '-6,67 M'],
+    [2283945061.7, '2.283,95 M'],
+    [-1296290740.7, '-1.296,29 M'],
+  ])('shows %f as %s', (value, expected) => {
+    expect(formatAmountShort(value)).toBe(expected)
+  })
+
+  it('keeps N/D for indicators that could not be computed', () => {
+    expect(formatAmountShort(null)).toBe(NOT_AVAILABLE_TEXT)
+  })
+})
+
+describe('formatAxisTick', () => {
+  it.each([
+    [0, '0'],
+    [12000, '12.000'],
+    [750000, '750.000'],
+    [2500000, '2,5 M'],
+    [750000000, '750 M'],
+    [1000000000, '1.000 M'],
+  ])('labels %f as %s, never dropping a leading digit', (value, expected) => {
+    expect(formatAxisTick(value)).toBe(expected)
   })
 })

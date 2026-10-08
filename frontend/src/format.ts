@@ -48,3 +48,33 @@ export function formatUnrounded(value: number): string {
 export function unroundedHint(value: number | null): string {
   return value === null ? NOT_AVAILABLE_HINT : `Valor sin redondear: ${formatUnrounded(value)}`
 }
+
+// Amounts from one million up are shown in millions where space is tight (table cells,
+// chart axis), so a figure never has to break across lines. The full value stays available.
+const MILLION = 1_000_000
+const MILLIONS_SUFFIX = ' M'
+const AXIS_MAX_DECIMALS = 1
+
+const axisFormat = new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 0 })
+const axisMillionsFormat = new Intl.NumberFormat(LOCALE, {
+  maximumFractionDigits: AXIS_MAX_DECIMALS,
+})
+
+export function isAbbreviated(value: number): boolean {
+  return Math.abs(value) >= MILLION
+}
+
+// 2194787.38 -> "2,19 M"; 2283945061.7 -> "2.283,95 M"; below a million, the full amount.
+export function formatAmountShort(value: number | null): string {
+  if (value === null || !isAbbreviated(value)) {
+    return formatNumber(value)
+  }
+  return `${numberFormat.format(value / MILLION)}${MILLIONS_SUFFIX}`
+}
+
+// Axis ticks are round numbers: no decimals below a million, millions above.
+export function formatAxisTick(value: number): string {
+  return isAbbreviated(value)
+    ? `${axisMillionsFormat.format(value / MILLION)}${MILLIONS_SUFFIX}`
+    : axisFormat.format(value)
+}
